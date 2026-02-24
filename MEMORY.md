@@ -43,6 +43,15 @@
 - Pushed SOUL.md changes to GitHub (created openclaw-workspace repo)
 - Learned about dotfiles structure: ~/.dotfiles contains Claude Code config, skills, commands, hooks
 
+**2026-02-25 (approx):**
+- Integration fixes applied by Dylan:
+  - iMessage delivery fixed (operator.write scope added, gateway restarted PID 8747)
+  - Nest thermostats confirmed online: Solarium 93.4°F, Living Room 69.5°F, Bedroom 69.5°F
+  - Weekly activity report self-resolved (claude-sonnet-4-6 model ID now recognized)
+  - catt reinstalled (v0.13.1) after broken venv from Python upgrade
+  - Spotify default device set to "Dylan's Mac mini" as fallback
+- Away routine run for cabin: lights off, speakers stopped, Roombas vacuumed and docked
+
 ## Active Systems & Automations
 
 **Dating/Restaurants:**
@@ -66,6 +75,9 @@
 **Spotify Connect:**
 - Kitchen speaker: device ID `b8581271559fd61aa994726df743285c` (default volume: 100)
 - Mac mini: device ID `0eb8b896cf741cd28d15b1ce52904ae7940e4aae`
+- Default spogo device set to "Dylan's Mac mini" as fallback
+- Google Home speakers only appear in Spotify Connect when actively playing — use `catt` to wake them into a cast session first
+- catt v0.13.1 installed; Kitchen speaker @ 192.168.1.66, Bedroom speaker @ 192.168.1.163
 
 **Calendar Management:**
 - Julia's Monty Tech courses registered and on calendar (both Spring 2026):
