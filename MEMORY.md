@@ -107,7 +107,7 @@
 
 ## Todos / Backlog
 
-- **Install `gws` CLI** (`@googleworkspace/cli`) — replace/upgrade `gog` skill with this official Google Workspace CLI. Has OpenClaw skill integration, MCP server, structured JSON output. Needs `gws auth setup` (requires browser for OAuth). Repo: https://github.com/googleworkspace/cli
+- ~~**Install `gws` CLI**~~ — **Done (2026-03-05).** 15 GWS skills deployed by Dylan: gws-gmail, gws-calendar, gws-drive (custom), plus 7 helpers and 5 recipes. Replaces `gog`. CLI at `/opt/homebrew/bin/gws`, credentials at `~/.config/gws/`. Accounts: dylanbochman@gmail.com (default), julia.joy.jennings@gmail.com, bochmanspam@gmail.com, clawdbotbochman@gmail.com.
 
 ## Key Contacts
 
