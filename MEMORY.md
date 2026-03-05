@@ -103,7 +103,11 @@
 
 - Dylan: Proactive communication preferred, separate texts to him and Julia
 - Julia: Prefers summaries first (TL;DR), then details
-- Kitchen speaker: Always volume 100 on next playback
+- Kitchen speaker: Max safe volume is 45 — never exceed this
+
+## Todos / Backlog
+
+- **Install `gws` CLI** (`@googleworkspace/cli`) — replace/upgrade `gog` skill with this official Google Workspace CLI. Has OpenClaw skill integration, MCP server, structured JSON output. Needs `gws auth setup` (requires browser for OAuth). Repo: https://github.com/googleworkspace/cli
 
 ## Key Contacts
 
