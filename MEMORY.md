@@ -105,6 +105,12 @@
 - Julia: Prefers summaries first (TL;DR), then details
 - Kitchen speaker: Max safe volume is 45 — never exceed this
 
+## Infrastructure Changes
+
+**2026-03-06:**
+- Cron jobs: 3 qd-booking payloads migrated from `gog calendar create` → `gws calendar events insert` (synced to Mini)
+- Refresh script: Removed stale `GOG_KEYRING_PASSWORD`; added `BLUEBUBBLES_PASSWORD`, `CIELO_USERNAME`, `CIELO_PASSWORD` (synced to Mini)
+
 ## Todos / Backlog
 
 - ~~**Install `gws` CLI**~~ — **Done (2026-03-05).** 15 GWS skills deployed by Dylan: gws-gmail, gws-calendar, gws-drive (custom), plus 7 helpers and 5 recipes. Replaces `gog`. CLI at `/opt/homebrew/bin/gws`, credentials at `~/.config/gws/`. Accounts: dylanbochman@gmail.com (default), julia.joy.jennings@gmail.com, bochmanspam@gmail.com, clawdbotbochman@gmail.com.
