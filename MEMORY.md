@@ -108,6 +108,7 @@
 ## Infrastructure Changes
 
 **2026-03-06:**
+- Base model upgraded to **claude-opus-4-6** (from claude-sonnet-4-6)
 - Cron jobs: 3 qd-booking payloads migrated from `gog calendar create` → `gws calendar events insert` (synced to Mini)
 - Refresh script: Removed stale `GOG_KEYRING_PASSWORD`; added `BLUEBUBBLES_PASSWORD`, `CIELO_USERNAME`, `CIELO_PASSWORD` (synced to Mini)
 
