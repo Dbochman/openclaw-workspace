@@ -33,6 +33,10 @@
 **West Roxbury House:**
 - 19 Crosstown Ave, West Roxbury, MA 02132
 
+## Known Contacts (Friends/Others)
+
+- **Ned** (508-397-3817) — Dylan's friend, NOT a trusted contact (chat only, no actions)
+
 ## Context
 
 Dylan and Julia split time between two houses. They need help managing both properties, staying organized, and keeping track of things across locations.
