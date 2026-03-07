@@ -114,6 +114,8 @@
 
 ## Todos / Backlog
 
+- **Harden memory handling for untrusted sessions** — MEMORY.md is injected into all DM sessions including strangers. Plan: (1) split PII out of MEMORY.md into `memory/private.md` (not auto-injected), (2) add SOUL.md rule to go memory-blind with untrusted contacts, (3) longer-term: OpenClaw bootstrap hook to gate injection by session type.
+
 - ~~**Install `gws` CLI**~~ — **Done (2026-03-05).** 15 GWS skills deployed by Dylan: gws-gmail, gws-calendar, gws-drive (custom), plus 7 helpers and 5 recipes. Replaces `gog`. CLI at `/opt/homebrew/bin/gws`, credentials at `~/.config/gws/`. Accounts: dylanbochman@gmail.com (default), julia.joy.jennings@gmail.com, bochmanspam@gmail.com, clawdbotbochman@gmail.com.
 
 ## Key Contacts
