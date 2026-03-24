@@ -1,0 +1,24 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": { "name": "95 School House Rd, Phillipston, MA 01331" },
+      "geometry": { "type": "Point", "coordinates": [-72.1510155, 42.6021368] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Area of Interest", "bbox_type": "area" },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [-72.1710, 42.5821],
+          [-72.1310, 42.5821],
+          [-72.1310, 42.6221],
+          [-72.1710, 42.6221],
+          [-72.1710, 42.5821]
+        ]]
+      }
+    }
+  ]
+}

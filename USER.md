@@ -18,8 +18,8 @@
 ## The Family
 
 **Dogs:**
-- Potato
-- Coconut
+- Potato (boy)
+- Coconut (girl, blue eyes, white pit bull)
 
 **Cats:**
 - Sopapilla
