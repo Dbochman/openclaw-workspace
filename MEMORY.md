@@ -144,6 +144,12 @@
 
 **Devices:** Crosstown doorbell (684794187, Ring Protect), Cabin doorbell (697442349, shared, no Ring Protect — no video analysis)
 
+## Presence Detection Fix (2026-03-24)
+- Fixed stale ARP entries causing false presence at Crosstown
+- Crosstown scan now: delete tracked ARP entries → re-ping (layer 2) → read fresh ARP table
+- Prevents "person left but ARP entry persists" false relocations
+- Deployed to both machines
+
 ## Todos / Backlog
 
 - **Harden memory handling for untrusted sessions** — MEMORY.md is injected into all DM sessions including strangers. Plan: (1) split PII out of MEMORY.md into `memory/private.md` (not auto-injected), (2) add SOUL.md rule to go memory-blind with untrusted contacts, (3) longer-term: OpenClaw bootstrap hook to gate injection by session type.
