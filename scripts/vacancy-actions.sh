@@ -3,11 +3,14 @@
 # Triggered by WatchPaths on ~/.openclaw/presence/state.json
 #
 # When confirmed_vacant:
-#   - Start Roombas
 #   - Turn off all lights
 #   - Set thermostat to eco
+#   - Turn off Cielo minisplits (Crosstown)
+#   - Turn off Eight Sleep Pod (Crosstown)
+#   - Start Roombas
 #
 # When occupied again:
+#   - Restore Eight Sleep Pod (resume smart schedule)
 #   - Clear markers (reset for next vacancy)
 #   - (Welcome home actions handled by crosstown-routines/cabin-routines skills)
 
@@ -16,7 +19,7 @@ set -euo pipefail
 PRESENCE_DIR="$HOME/.openclaw/presence"
 STATE_FILE="$PRESENCE_DIR/state.json"
 MARKER_DIR="$PRESENCE_DIR/vacancy-dispatched"
-LOG_FILE="/tmp/vacancy-actions.log"
+LOG_FILE="$HOME/.openclaw/logs/vacancy-actions.log"
 
 # All CLIs resolved via PATH (~/.openclaw/bin + /opt/homebrew/bin)
 
@@ -75,6 +78,15 @@ if [[ "$crosstown_occupancy" == "confirmed_vacant" ]] && [[ ! -f "$MARKER_DIR/cr
     fi
   done
 
+  # Eight Sleep Pod off
+  for side in dylan julia; do
+    if 8sleep off "$side" >> "$LOG_FILE" 2>&1; then
+      log "  Eight Sleep $side: OFF"
+    else
+      log "  ERROR: Failed to turn off Eight Sleep $side"
+    fi
+  done
+
   # Start Roombas
   if crosstown-roomba start all >> "$LOG_FILE" 2>&1; then
     log "  Crosstown Roombas: STARTED"
@@ -86,7 +98,17 @@ if [[ "$crosstown_occupancy" == "confirmed_vacant" ]] && [[ ! -f "$MARKER_DIR/cr
   log "Crosstown vacancy actions complete"
 
 elif [[ "$crosstown_occupancy" == "occupied" ]] && [[ -f "$MARKER_DIR/crosstown" ]]; then
-  log "Crosstown occupied again — clearing vacancy marker"
+  log "Crosstown occupied again — restoring Eight Sleep and clearing vacancy marker"
+
+  # Eight Sleep Pod back on (resume smart schedule)
+  for side in dylan julia; do
+    if 8sleep on "$side" >> "$LOG_FILE" 2>&1; then
+      log "  Eight Sleep $side: ON"
+    else
+      log "  ERROR: Failed to turn on Eight Sleep $side"
+    fi
+  done
+
   rm -f "$MARKER_DIR/crosstown"
 fi
 

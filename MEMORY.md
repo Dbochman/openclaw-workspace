@@ -112,37 +112,42 @@
 - Cron jobs: 3 qd-booking payloads migrated from `gog calendar create` → `gws calendar events insert` (synced to Mini)
 - Refresh script: Removed stale `GOG_KEYRING_PASSWORD`; added `BLUEBUBBLES_PASSWORD`, `CIELO_USERNAME`, `CIELO_PASSWORD` (synced to Mini)
 
-## Ring Doorbell & Dog Walk Automation (deployed 2026-03-24)
+## Dog Walk Automation (rewritten 2026-04-04)
 
-**Ring CLI:** `ring` wrapper for status, events, videos, snapshots, downloads (via python-ring-doorbell in venv)
+**Architecture:** Fi GPS collar → departure detection → Roomba automation → multi-signal return monitoring. Replaced old Ring vision pipeline (removed Haiku video analysis, FindMy/Peekaboo, accumulator windows).
 
-**Real-time listener** (`ai.openclaw.ring-listener` LaunchAgent):
-- FCM push notifications → instant ding alerts with camera frame + Haiku AI description
-- Person-detected motion processed silently for Roomba automation
-- Multi-frame video analysis (5 centered frames → Haiku) with 10-frame retry for 1-dog edge case
-- Recording download with 3-attempt retry and backoff
+**Skills:** `dog-walk` (listener + automation), `fi-collar` (GPS/battery queries), `ring-doorbell` (Ring CLI, dings only now)
 
-**Dog Walk Automation:**
-- 10-minute sliding window accumulator across separate motion events
-- 1+ people + 2+ dogs → auto-start Roombas + FindMy return tracking
-- 1+ people + 1 dog → iMessage confirmation to Dylan
-- Time-of-day filter (8-10 AM, 11 AM-1 PM, 5-8 PM)
-- Presence cross-check (skip if confirmed_vacant)
-- Direction filter removed (unreliable with fisheye)
-- 2-hour cooldown per location per action
+**Listener** (`ai.openclaw.dog-walk-listener` LaunchAgent, 1354 lines):
+- Fi GPS polling every 3 min during walk hours (7AM-12PM, 12-5PM, 5-9PM)
+- Departure: 2 consecutive Fi readings outside geofence, ≥3 min apart, both <10 min old
+- Tracks `home_location` (last confirmed in-geofence home) as departure anchor
+- Ring FCM push still used for ding alerts + return motion signal (not departure)
 
-**FindMy Return Tracking:**
-- Peekaboo screenshots FindMy app every 5 min
-- Haiku checks proximity to home (Crosstown Ave / School House Rd)
-- Docks Roombas silently on return; 2-hour timeout fallback
+**Return Detection** (multi-signal, any one docks):
+- Ring doorbell motion (event-driven)
+- WiFi/ARP scan every 60s (Crosstown via MBP SSH, Cabin via Starlink gRPC)
+- Fi GPS every 60s (Potato re-enters home geofence)
+- 2-hour safety timeout fallback
 
-**Crosstown Roombas** (`crosstown-roomba` skill, deployed same day):
+**Route Tracking:**
+- Per-walk route files: `~/.openclaw/dog-walk/routes/<location>/<YYYY-MM-DD>/<walk_id>.json`
+- Includes distance_m, point_count, end_location, inter-home transit filtering
+- Immutable walk_id + origin_location at departure
+
+**Dashboard** (`ai.openclaw.dog-walk-dashboard` on port 8552):
+- Leaflet maps with route polylines + heatmap layers
+- Fi collar status (battery, GPS, activity)
+- Roomba status (both houses — Crosstown via SSH/dorita980, Cabin via iRobot cloud)
+- Walk log table, duration/signal/funnel charts
+- Click-to-select walk routes on map
+
+**State:** `~/.openclaw/dog-walk/state.json` + daily JSONL in `history/`
+
+**Devices:** Crosstown doorbell (684794187, Ring Protect), Cabin doorbell (697442349, shared, no Ring Protect)
+
+**Crosstown Roombas** (`crosstown-roomba` skill):
 - Roomba Combo 10 Max + Scoomba J5 via dorita980 MQTT through MacBook Pro SSH
-- Fixed bash `set -u` + associative array bug in the CLI script
-
-**State:** `~/.openclaw/ring-listener/state.json` + daily JSONL history in `history/`
-
-**Devices:** Crosstown doorbell (684794187, Ring Protect), Cabin doorbell (697442349, shared, no Ring Protect — no video analysis)
 
 ## Presence Detection Fix (2026-03-24)
 - Fixed stale ARP entries causing false presence at Crosstown

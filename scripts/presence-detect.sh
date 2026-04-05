@@ -21,7 +21,7 @@
 
 set -euo pipefail
 
-LOG_FILE="/tmp/presence-detect.log"
+LOG_FILE="$HOME/.openclaw/logs/presence-detect.log"
 NODE="/opt/homebrew/bin/node"
 GRPCURL="/opt/homebrew/bin/grpcurl"
 TAILSCALE="/usr/local/bin/tailscale"
@@ -46,7 +46,7 @@ CABIN_DEVICES='[
   {"person":"Dylan","match":"name","pattern":"Dylan","require":"iPhone"},
   {"person":"Dylan","match":"name","pattern":"Dylan","require":"phone"},
   {"person":"Julia","match":"name","pattern":"Julia"},
-  {"person":"Julia","match":"name_fallback","pattern":"iPhone","excludeNames":["Dylan"]}
+  {"person":"Julia","match":"name_fallback","pattern":"iPhone","excludeNames":["Dylan"]},
 ]'
 
 # Crosstown (Boston) — matched by MAC address via ARP scan
