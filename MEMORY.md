@@ -155,6 +155,29 @@
 - Prevents "person left but ARP entry persists" false relocations
 - Deployed to both machines
 
+## FindMy Locate (deployed 2026-04-04)
+
+**Skill:** `findmy-locate` — locates Dylan/Julia via Apple FindMy using Peekaboo keyboard automation + screenshot capture.
+
+**Usage notes:**
+- `findmy-locate dylan`, `findmy-locate julia`, `findmy-locate both`
+- Returns JSON with screenshot path → read the image to interpret the map location
+- Screenshots saved to `~/.openclaw/findmy-locate/` (no auto-cleanup, prune manually with `find -mtime +7`)
+- Copy screenshot to workspace before using `image` tool (findmy-locate dir isn't in allowed paths)
+
+**Sidebar order (as of 2026-04-04):** Me (0) → Dylan (1) → Julia (2)
+- ⚠️ Script constants say Julia=1, Dylan=2 — **labels are swapped from actual sidebar order**
+- The `both` flow labels captures backwards (first capture says "Julia" but sidebar shows Dylan selected)
+- Solo `findmy-locate dylan` navigates to pos 2 which is actually Julia — **positions need fixing in the script**
+- If someone gets added/removed from FindMy, sidebar order will shift — check visually
+
+**TCC requirements:**
+- Peekaboo needs Screen Recording + Accessibility grants
+- Grants must cover the process context OpenClaw runs under (not just Terminal.app)
+- If capture fails with "Screen recording permission required", re-grant in System Settings → Privacy & Security → Screen Recording
+
+**Integration:** Pairs well with `places` skill for follow-up queries ("what's near them", "how far from home")
+
 ## Todos / Backlog
 
 - **Harden memory handling for untrusted sessions** — MEMORY.md is injected into all DM sessions including strangers. Plan: (1) split PII out of MEMORY.md into `memory/private.md` (not auto-injected), (2) add SOUL.md rule to go memory-blind with untrusted contacts, (3) longer-term: OpenClaw bootstrap hook to gate injection by session type.
