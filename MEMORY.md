@@ -27,6 +27,9 @@
 - Nest thermostats
 - Google Nest cameras
 - Google smart speakers
+- August Wi-Fi Smart Lock 4th gen (Crosstown front door, serial L5V82000F7)
+- Cielo minisplits (Crosstown: bedroom, office, living room)
+- Eight Sleep Pod 3 (Crosstown, Dylan=left, Julia=right)
 
 ## Timeline
 
@@ -64,7 +67,6 @@
 **Music Queue (Andre):**
 - Collaborative music queue API running on DigitalOcean (192.241.153.83)
 - Preference mix: ambient/electronic/jazz/instrumental
-- API token: `Tx1i35k9iFgSu_TBQ3SX4d4IFMunHY3c4zDd8N0xUF0` (stored in 1Password)
 - Active queue includes: Pretty Lights, Gramatik, Tycho, Japanese, jazz, Madlib/Madvillain
 
 **Temperature Monitoring:**
@@ -88,9 +90,7 @@
 
 ## Browser & Web Access
 
-- Headless Chromium 145 (Playwright) enabled on Mac mini
-- OpenClaw browser profile: "openclaw" with CDP port 18800
-- Optimizations: headless mode, JavaScript eval enabled, efficient snapshot mode
+- Pinchtab CLI at /opt/homebrew/bin/pinchtab (headless Chrome control)
 - OpenTable: bot detection persists (use Resy as workaround)
 
 ## Amazon Shopping
@@ -106,6 +106,11 @@
 - Kitchen speaker: Max safe volume is 45 — never exceed this
 
 ## Infrastructure Changes
+
+**2026-04-05:**
+- August smart lock skill deployed and verified working (Crosstown front door: locked, 96% battery, WiFi -47dBm)
+- Lock integrated into vacancy-actions.sh — auto-locks when Crosstown becomes confirmed_vacant
+- crosstown-routines skill updated with note not to duplicate vacancy automation
 
 **2026-03-06:**
 - Base model upgraded to **claude-opus-4-6** (from claude-sonnet-4-6)
@@ -149,6 +154,21 @@
 **Crosstown Roombas** (`crosstown-roomba` skill):
 - Roomba Combo 10 Max + Scoomba J5 via dorita980 MQTT through MacBook Pro SSH
 
+**August Lock** (`august-lock` skill, deployed 2026-04-05):
+- August Wi-Fi Smart Lock 4th gen at Crosstown front door
+- CLI: `august status|lock|unlock|locks|details`
+- Architecture: Mini → SSH → MBP → august-api npm → August Cloud
+- Auth: dylanbochman@gmail.com, JWT token (~120 day expiry), installId cached on MBP
+- Config: `~/.openclaw/august/config.json` on MBP
+
+**Vacancy Automation** (`vacancy-actions.sh`, WatchPaths on presence state.json):
+- Crosstown vacant → lights off, eco mode, Cielo off, Eight Sleep off, **front door locked**, Roombas start, iMessage notification to Dylan
+- Crosstown occupied → Eight Sleep restored, vacancy marker cleared
+- Cabin vacant → lights off, eco mode, Roombas start
+- Cabin occupied → marker cleared
+- Lock logic: checks if already locked first, sends different iMessage for already-locked vs newly-locked vs failed
+- Marker files in `~/.openclaw/presence/vacancy-dispatched/` prevent duplicate runs
+
 ## Presence Detection Fix (2026-03-24)
 - Fixed stale ARP entries causing false presence at Crosstown
 - Crosstown scan now: delete tracked ARP entries → re-ping (layer 2) → read fresh ARP table
@@ -165,11 +185,10 @@
 - Screenshots saved to `~/.openclaw/findmy-locate/` (no auto-cleanup, prune manually with `find -mtime +7`)
 - Copy screenshot to workspace before using `image` tool (findmy-locate dir isn't in allowed paths)
 
-**Sidebar order (as of 2026-04-04):** Me (0) → Dylan (1) → Julia (2)
-- ⚠️ Script constants say Julia=1, Dylan=2 — **labels are swapped from actual sidebar order**
-- The `both` flow labels captures backwards (first capture says "Julia" but sidebar shows Dylan selected)
-- Solo `findmy-locate dylan` navigates to pos 2 which is actually Julia — **positions need fixing in the script**
-- If someone gets added/removed from FindMy, sidebar order will shift — check visually
+**Sidebar order (fixed 2026-04-04):** Me (0) → Dylan (1) → Julia (2)
+- Script positions are correct: Dylan=1, Julia=2
+- `both` mode: single pass — Dylan first, then Julia (no re-open)
+- If someone gets added/removed from FindMy, sidebar order may shift — check visually
 
 **TCC requirements:**
 - Peekaboo needs Screen Recording + Accessibility grants
@@ -182,7 +201,6 @@
 
 - **Harden memory handling for untrusted sessions** — MEMORY.md is injected into all DM sessions including strangers. Plan: (1) split PII out of MEMORY.md into `memory/private.md` (not auto-injected), (2) add SOUL.md rule to go memory-blind with untrusted contacts, (3) longer-term: OpenClaw bootstrap hook to gate injection by session type.
 
-- ~~**Install `gws` CLI**~~ — **Done (2026-03-05).** 15 GWS skills deployed by Dylan: gws-gmail, gws-calendar, gws-drive (custom), plus 7 helpers and 5 recipes. Replaces `gog`. CLI at `/opt/homebrew/bin/gws`, credentials at `~/.config/gws/`. Accounts: dylanbochman@gmail.com (default), julia.joy.jennings@gmail.com, bochmanspam@gmail.com, clawdbotbochman@gmail.com.
 
 ## Key Contacts
 
