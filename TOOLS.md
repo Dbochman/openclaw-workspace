@@ -87,7 +87,7 @@ cp /tmp/screenshot.png ~/.openclaw/workspace/tmp/screenshot.png
 
 ## GWS (Google Workspace CLI)
 
-CLI at `/opt/homebrew/bin/gws` (v0.4.4, Rust binary). Gmail, Calendar, Drive, Tasks.
+CLI at `/opt/homebrew/bin/gws` (**pinned at v0.4.4**, Rust binary). Gmail, Calendar, Drive, Tasks. Do NOT bump — 0.22.x is a breaking redesign that drops `--account` in favor of per-account `GOOGLE_WORKSPACE_CLI_CONFIG_DIR` dirs. See `openclaw/plans/gws-0.22-migration.md` for the full migration plan before upgrading.
 
 - Command pattern: `gws <service> <resource> <method> [--params '<JSON>'] [--json '<JSON>'] [--account <email>]`
 - Credentials: AES-256-GCM encrypted at `~/.config/gws/`
@@ -112,7 +112,7 @@ CLI at `/opt/homebrew/bin/gws` (v0.4.4, Rust binary). Gmail, Calendar, Drive, Ta
 
 ## Pinchtab (Browser Automation)
 
-CLI at `/opt/homebrew/bin/pinchtab` (v0.7.6). Headless Chrome control for web tasks.
+CLI at `/opt/homebrew/bin/pinchtab` (v0.11.0). Headless Chrome control for web tasks. The native binary lives at `~/.pinchtab/bin/<version>/pinchtab-darwin-arm64`; the npm `pinchtab` shim resolves it.
 
 ### Lifecycle
 
@@ -139,9 +139,9 @@ pinchtab ss -o /tmp/screenshot.png  # Screenshot
 
 ### Gotchas
 
-- React SPAs: `element.click()` via `eval` may not trigger React handlers — use `pinchtab click <ref>` instead
-- Always `pkill -f pinchtab` when done — leftover Chrome processes eat memory
-- Cookie/session state persists between `nav` calls within the same server session
+- React SPAs: `element.click()` via `eval` may not fire React handlers — use `pinchtab click <ref>` instead.
+- Always `pkill -f pinchtab` when done (auto-spawned servers persist past `daemon stop`).
+- v0.11.0+: `security.allowEvaluate` defaults off (eval returns 403). Profiles now at `~/.pinchtab/profiles/<name>/`. v0.11 transition details: `qmd query "pinchtab 0.11 upgrade"`.
 
 ## BlueBubbles
 
@@ -153,27 +153,22 @@ OpenClaw v2026.3.7+ uses **webhook-only** for BB (no socket.io client). BB POSTs
 
 ### Watchdog (`com.openclaw.bb-watchdog`)
 
-Script at `~/.openclaw/workspace/scripts/bb-watchdog.sh`, runs every 60s. Four detection modes:
-
-1. **Private API helper disconnected** — queries `/api/v1/server/info` for `helper_connected: false`. Full BB restart (not soft — soft restart doesn't fix chat.db observer co-stalls).
-2. **Chat.db observer stall** — GUID changes but no webhook dispatch. Poke-first, then full restart after 3 failed pokes.
-3. **Webhook service dead** — no dispatch in 30+ min but new messages arriving. Full BB restart.
-4. **Gateway BB plugin dead** — BB dispatching but gateway not processing. Gateway-only restart.
-
-All restarts share a 15-min cooldown. Gateway restarts are **deferred while cron jobs are running** — the watchdog checks `runningAtMs` markers in `jobs.json` and retries on the next 60s cycle. Full details: `openclaw/plans/bluebubbles-implementation-current-state.md`
+Script at `~/.openclaw/workspace/scripts/bb-watchdog.sh`, runs every 60s. Four detection modes (helper down, chat.db observer stall, webhook dead, gateway plugin dead). 15-min cooldown; gateway restarts deferred while cron jobs run (checks `runningAtMs` in `jobs.json`). Details: `qmd query "bb watchdog modes"`.
 
 ### Key Gotchas
 
-- **NEVER use soft restart for recovery** — `/server/restart/soft` reconnects the Private API helper but does NOT restart the chat.db file system observer, leaving BB blind to new messages
-- **BB + gateway restarts must be sequenced** — watchdog waits 15s after BB relaunch before restarting gateway to re-register webhook
-- **Cloudflare daemon crash-loop** — BB runs it even with `lan-url` proxy; can corrupt event loop
-- **v2026.3.7 BB plugin import bug** — `monitor-normalize.ts` has broken import; weekly upgrade script auto-patches
+- **Chat history search: always query by handle, not just chat GUID** — BB sometimes stores DM messages with empty `chats[]` arrays. Use `/api/v1/message/query` with `handle.id = :value` to search by phone/email.
+- **NEVER use soft restart for recovery** — reconnects the Private API helper but does NOT restart the chat.db observer, leaving BB blind to new messages.
+- **BB + gateway restarts must be sequenced** — watchdog waits 15s after BB relaunch before restarting gateway to re-register webhook.
+- Other gotchas (Cloudflare daemon crash, v2026.3.7 import bug): `qmd query "bluebubbles gotchas"`.
 
 ### Quick Reference
 
 - Base URL: `http://localhost:1234/api/v1`
 - Auth: `?password=${BLUEBUBBLES_PASSWORD}`
-- DM GUIDs: `any;-;` prefix; Group GUIDs: `iMessage;+;` prefix
+- DM GUIDs: `any;-;<address>` (e.g., `any;-;julia.joy.jennings@gmail.com`)
+- Group GUIDs: `any;+;<chat-identifier-hex>` (e.g., the Dylan+Julia date-night chat is `any;+;7010feab69b14fa19071a88340495f2f`). Older docs said `iMessage;+;` but BB returns `any;+;` as canonical.
+- **Send `target` should be a chat GUID**, not raw phone/email — the plugin's `parseRawChatGuid` routes `<service>;<+|->;<id>` strings as `kind: chat_guid` and skips the slow `/chat/query` + `/chat/new` lookup (saves 30-90s per send to a known contact). See SOUL.md "BlueBubbles routing" for the canonical Dylan / Julia / group-chat targets.
 - Reaction types: `love`, `like`, `dislike`, `laugh`, `emphasize`, `question`
 - For Private API curl examples: `qmd query "bluebubbles private API"`
 
@@ -202,9 +197,29 @@ Script at `~/.openclaw/workspace/scripts/presence-detect.sh`. Sticky/arrival-bas
 - States: **occupied** / **confirmed_vacant** / **possibly_vacant**
 - For device fingerprints, output files, and gotchas: `qmd query "presence detection"`
 
+**Read presence data with Bash, not node tools.** The presence files live locally on the Mac Mini gateway — just `cat ~/.openclaw/presence/state.json`. Never use `dir_list` or `file_fetch` for this; those are node tools for remote paired devices and will always fail here (zero nodes paired).
+
+## Node Tools (dir_list, file_fetch, dir_fetch, file_write)
+
+These tools are part of the `file-transfer` plugin (added v2026.5.3) and operate **exclusively on remote paired nodes** — think iPhones or Macs running the OpenClaw node app. They require a valid node handle from the registry.
+
+**This setup has zero paired nodes.** `openclaw nodes status` returns `Known: 0 · Paired: 0 · Connected: 0`. The file-transfer plugin is also not configured in `openclaw.json`. Every node handle you try — `auto`, `host`, `localhost`, `mini`, `gateway`, anything — will return `error: unknown node`.
+
+**Never use node tools to access local gateway files.** For any file under `~/.openclaw/`, use `Bash` directly or the skill's documented commands. Node tools are only relevant if a node device is explicitly paired in the future via `openclaw nodes` or the `node-connect` skill.
+
 ## Crosstown Network
 
 Mac Mini → MacBook Pro SSH via Tailscale (`ssh dylans-macbook-pro`), dedicated key `~/.ssh/id_mini_to_mbp` (bypasses 1Password agent — hangs under launchd). Configured via `Match originalhost` in `~/.ssh/config`.
+
+## Financial Dashboard
+
+Repo `~/repos/financial-dashboard/` on Mini; SPA on port 8585; weekly cron `financial-scrape-0001` (Sundays 4:05 ET) runs 7 scrapers, all self-healing:
+
+- **Tier 1** — Tesla Solar (API only).
+- **Tier 2** — Eversource, NG Electric, NG Gas, BWSC, PennyMac. Playwright with `--re-auth` flag; each saves `storage_state.json` in its `.NAME_session/` dir. PennyMac auto-fetches email-MFA codes from Julia's Gmail via `gws`. Creds at `op://OpenClaw/<url-style-title>/...`.
+- **Tier 2b** — BoA. Bot detection defeats every Playwright-launched approach; instead the scraper does `playwright.chromium.connect_over_cdp(...)` to Pinchtab's already-running Chrome (port discovered by `ps`-grep for `--user-data-dir=~/.pinchtab/profiles`). Bootstrap rare (weeks-months) — user Screen Shares + manually logs in once. Never `page.goto()` or `context.close()` in CDP mode.
+
+Cron prompt at `openclaw cron list --json` (id `financial-scrape-0001`) is the canonical operational spec. Dev architecture: `~/repos/financial-dashboard/CLAUDE.md`. Reusable patterns: skills `playwright-email-mfa-flow`, `playwright-device-trust-bootstrap`, `web-auth-check-by-title-not-url`.
 
 ## Dashboards
 
@@ -213,6 +228,6 @@ Mac Mini → MacBook Pro SSH via Tailscale (`ssh dylans-macbook-pro`), dedicated
 | Nest Climate | 8550 | Thermostat + weather + presence |
 | Usage | 8551 | Token consumption + agent activity |
 | Dog Walk | 8552 | Walk history, Fi GPS, Roomba status, route maps |
-| Financial | 8585 | Utilities, spending |
+| Financial | 8585 | Utilities, mortgage, solar, water |
 
-For API endpoints and UI features: `qmd query "nest dashboard API"` or `qmd query "usage dashboard"` or `qmd query "dog walk dashboard"`
+For API endpoints and UI features: `qmd query "nest dashboard API"` etc.
