@@ -17,6 +17,9 @@
 
 ## The Family
 
+**People:**
+- Cameron (Cam) Bochman (+1-781-626-1562) — Dylan's brother, TRUSTED contact (full actions, keep Dylan informed)
+
 **Dogs:**
 - Potato (boy)
 - Coconut (girl, blue eyes, white pit bull)
@@ -36,7 +39,6 @@
 ## Known Contacts (Friends/Others)
 
 - **Ned** (508-397-3817) — Dylan's friend, NOT a trusted contact (chat only, no actions)
-- **Cameron (Cam) Bochman** (+1-781-626-1562) — Dylan's brother, TRUSTED contact (full actions, keep Dylan informed)
 - **Andy Bochman** (andybochman@icloud.com) — Dylan's father, friendly engagement OK per Dylan (5/22/2026)
 - **Renee Murphy** (+1-774-244-1474) — Dylan's mother, TRUSTED contact (full actions and private context; confirmed 6/27/2026)
 

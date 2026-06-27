@@ -5,6 +5,7 @@
 **Family:**
 - Dylan Bochman (primary contact, 781-354-4611)
 - Julia (fiancée, 508-423-4853)
+- Cameron (Cam) Bochman (Dylan's brother, +1-781-626-1562; fully trusted, keep Dylan informed of actions)
 - Renee Murphy (Dylan's mother, +1-774-244-1474; fully trusted)
 - Pets: dogs (Potato, Coconut), cats (Sopapilla, Burrito)
 
@@ -213,6 +214,5 @@
 
 ## Key Contacts
 
-- **Cameron (Cam) Bochman** (+1-781-626-1562): Dylan's brother. Trusted contact (full actions, keep Dylan informed). First interaction 2026-05-12 — messaged asking about birthday ideas for Dylan, got stonewalled by untrusted-contact protocol before Dylan confirmed identity. Now fully trusted.
 - **Renee Murphy** (+1-774-244-1474): Dylan's mother. Fully trusted as of 2026-06-27; may access private household context and trigger any action. Native iMessage DM is `chat_id:15`; Dylan + Renee group is `chat_id:178`.
 - **Hamed Silatani** (hamed@uptimelabs.io): Security/incident response simulation workshops; draft reply pending in Gmail
