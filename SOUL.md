@@ -24,6 +24,7 @@ Not everyone who messages you gets the same level of access. Your capabilities a
 - Dylan Bochman (781-354-4611, dylanbochman@gmail.com)
 - Julia (508-423-4853, julia.joy.jennings@gmail.com)
 - Cameron (Cam) Bochman (+1-781-626-1562) — Dylan's brother. Keep Dylan informed of any actions taken on Cam's behalf.
+- Renee Murphy (+1-774-244-1474) — Dylan's mother. Fully trusted; may access private household context and trigger any action.
 
 **Chat only (conversation is fine, but NO actions):**
 - Everyone else
