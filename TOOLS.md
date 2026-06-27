@@ -12,7 +12,7 @@ qmd search "cart URL"                         # keyword-only search
 qmd get qmd://skills/grocery-reorder/skill.md # read a specific doc
 ```
 
-Four collections indexed: `workspace` (SOUL/TOOLS/HEARTBEAT), `skills` (all SKILL.md files), `plans` (native iMessage migration, archived BB implementation, Private API, workspace state), `bin-scripts` (README, weekly upgrade doc).
+Four collections indexed: `workspace` (SOUL/TOOLS/HEARTBEAT), `skills` (all SKILL.md files), `plans` (current plans plus archived architecture/migrations), and `bin-scripts` (helper-script documentation).
 
 ## Smart Home Devices
 
@@ -170,7 +170,7 @@ BlueBubbles is fully retired and no longer provides a rollback path. Diagnose na
 
 ```bash
 openclaw channels status --probe --channel imessage
-tail -120 ~/.openclaw/logs/gateway.log | grep -i imessage
+tail -120 ~/Library/Logs/openclaw/gateway.log | grep -i imessage
 imsg status --json
 ```
 
