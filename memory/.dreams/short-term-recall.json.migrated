@@ -1,0 +1,289 @@
+{
+  "version": 1,
+  "updatedAt": "2026-06-21T19:39:49.481Z",
+  "entries": {
+    "memory:memory/2026-05-12.md:1:9": {
+      "key": "memory:memory/2026-05-12.md:1:9",
+      "path": "memory/2026-05-12.md",
+      "startLine": 1,
+      "endLine": 9,
+      "source": "memory",
+      "snippet": "## Cam Bochman Onboarded - Dylan's brother Cameron (Cam) Bochman (+1-781-626-1562) added as trusted contact - Had earlier DM exchange where I stonewalled him (unknown contact protocol) — he was trying to get birthday gift ideas for Dylan - Upgraded to full trust with \"keep Dylan informed\" condition - **BB API lesson:** DM messages can have empty `chats[]` arrays. Always search by `handle.id` via `/api/v1/message/query`, not just chat lookup. Added to TOOLS.md. - Group chat with Cam exists from April 26 (date night planning thread)",
+      "recallCount": 2,
+      "dailyCount": 0,
+      "groundedCount": 0,
+      "totalScore": 0.923239160031543,
+      "maxScore": 0.531585523933635,
+      "firstRecalledAt": "2026-05-19T21:06:46.162Z",
+      "lastRecalledAt": "2026-05-22T14:36:39.903Z",
+      "queryHashes": [
+        "f40437b411b9",
+        "8853ad33b383"
+      ],
+      "recallDays": [
+        "2026-05-19",
+        "2026-05-22"
+      ],
+      "conceptTags": [
+        "1-781-626-1562",
+        "handle.id",
+        "api/v1/message/query",
+        "tools.md",
+        "cam",
+        "bochman",
+        "onboarded",
+        "dylan's"
+      ]
+    },
+    "memory:memory/2026-03-28.md:1:9": {
+      "key": "memory:memory/2026-03-28.md:1:9",
+      "path": "memory/2026-03-28.md",
+      "startLine": 1,
+      "endLine": 9,
+      "source": "memory",
+      "snippet": "# 2026-03-28 (Saturday) ## Calendar Auth Failures in Morning Briefing - Today's 8:00 AM briefing: `gws calendar +agenda --days 7` returned 401 \"Calendar auth failed: Failed to get token\" - Gmail worked fine in the same session — separate OAuth tokens per service - Dylan says this is the **second day in a row** calendar auth failed at briefing time - Calendar worked fine when tested manually at 8:12 AM (transient/token refresh timing issue) - **Action:** If it fails again Monday, add retry logic to the morning briefing cron job",
+      "recallCount": 1,
+      "dailyCount": 0,
+      "groundedCount": 0,
+      "totalScore": 0.37314077913761134,
+      "maxScore": 0.37314077913761134,
+      "firstRecalledAt": "2026-05-31T12:00:24.504Z",
+      "lastRecalledAt": "2026-05-31T12:00:24.504Z",
+      "queryHashes": [
+        "d3988234806d"
+      ],
+      "recallDays": [
+        "2026-05-31"
+      ],
+      "conceptTags": [
+        "transient/token",
+        "saturday",
+        "calendar",
+        "auth",
+        "failures",
+        "morning",
+        "briefing",
+        "today's"
+      ]
+    },
+    "memory:memory/2026-02-06.md:1:37": {
+      "key": "memory:memory/2026-02-06.md:1:37",
+      "path": "memory/2026-02-06.md",
+      "startLine": 1,
+      "endLine": 37,
+      "source": "memory",
+      "snippet": "# 2026-02-06 - Session Summary ## Major Accomplishments ### Infrastructure & Automation - Fixed Philips Hue bash 4+ compatibility issues - Set up Nest thermostat monitoring with 30-min snapshots + <40°F alerting - Installed curl_cffi for Chrome TLS impersonation (failed for OpenTable bot detection) - Configured headless Chromium browser with Playwright for web automation - Verified browser optimization suite (efficient snapshots, headless mode, JavaScript eval) ### Restaurant Bookings & Calendar - Successfully booked Juliet via Resy (3/20/2026, party of 2) - Created 9 monthly cron jobs for automated date night booking (April-Dec 2026) - Verified Google Calendar event creation with Julia i",
+      "recallCount": 1,
+      "dailyCount": 0,
+      "groundedCount": 0,
+      "totalScore": 0.38368150848835403,
+      "maxScore": 0.38368150848835403,
+      "firstRecalledAt": "2026-06-03T10:02:15.936Z",
+      "lastRecalledAt": "2026-06-03T10:02:15.936Z",
+      "queryHashes": [
+        "7c1bc4e8f5e5"
+      ],
+      "recallDays": [
+        "2026-06-03"
+      ],
+      "conceptTags": [
+        "30-min",
+        "curl-cffi",
+        "3/20/2026",
+        "april-dec",
+        "summary",
+        "major",
+        "accomplishments",
+        "infrastructure"
+      ]
+    },
+    "memory:memory/2026-02-07.md:28:61": {
+      "key": "memory:memory/2026-02-07.md:28:61",
+      "path": "memory/2026-02-07.md",
+      "startLine": 28,
+      "endLine": 61,
+      "source": "memory",
+      "snippet": "1. **Analytics Check (every 48 hours):** Personal website traffic + open PRs 2. **Temperature Alert (every 30 minutes):** Monitor Living Room/Bedroom for temps <40°F 3. **Monthly Date Night Bookings (9 jobs):** April-December 2026, 1st of each month ### Browser & Automation - Browser optimizations applied successfully: - Managed headless Chromium profile - Efficient snapshot mode (compact output, fewer tokens) - JavaScript evaluation enabled - Amazon loads perfectly - OpenTable still blocked (HTTP/2 protocol error - strong bot detection) - Resy API works reliably for restaurant bookings ### Group Chat Discovery - **Bug Found & Fixed:** imsg send to group chat requires `--to \"7010",
+      "recallCount": 1,
+      "dailyCount": 0,
+      "groundedCount": 0,
+      "totalScore": 0.38187804022115085,
+      "maxScore": 0.38187804022115085,
+      "firstRecalledAt": "2026-06-03T10:02:15.936Z",
+      "lastRecalledAt": "2026-06-03T10:02:15.936Z",
+      "queryHashes": [
+        "7c1bc4e8f5e5"
+      ],
+      "recallDays": [
+        "2026-06-03"
+      ],
+      "conceptTags": [
+        "room/bedroom",
+        "april-december",
+        "http/2",
+        "analytics",
+        "check",
+        "hours",
+        "personal",
+        "website"
+      ]
+    },
+    "memory:memory/2026-06-19.md:1:5": {
+      "key": "memory:memory/2026-06-19.md:1:5",
+      "path": "memory/2026-06-19.md",
+      "startLine": 1,
+      "endLine": 5,
+      "source": "memory",
+      "snippet": "# 2026-06-19 - Q3 quarterly group dinner cron checked July 2026 Resy/calendar state. Washington Square Tavern (Resy venue 77292) is confirmed for Fri 2026-07-10 at 6:30 PM for 4, Dining Room, address 714 Washington St, Brookline. Julia calendar already has matching event created 2026-06-15 inviting Dylan, so no duplicate event was created. - Noted possible duplicate Q3 dinner state: Iru (venue 88311) also appears as an upcoming Resy reservation for Fri 2026-07-17 at 6:30 PM for 4 and Julia calendar has “Quarterly Dinner @ Iru (Korean)” created 2026-06-17. Do not cancel without Dylan/Julia confirmation because Resy shows cancellation allowed with $60 fee.",
+      "recallCount": 2,
+      "dailyCount": 0,
+      "groundedCount": 0,
+      "totalScore": 1.2092355171156692,
+      "maxScore": 0.8252557674361038,
+      "firstRecalledAt": "2026-06-21T10:00:48.927Z",
+      "lastRecalledAt": "2026-06-21T19:39:49.481Z",
+      "queryHashes": [
+        "10315a0354f8",
+        "9ef6bb7fa072"
+      ],
+      "recallDays": [
+        "2026-06-21"
+      ],
+      "conceptTags": [
+        "resy/calendar",
+        "dylan/julia",
+        "quarterly",
+        "group",
+        "dinner",
+        "cron",
+        "checked",
+        "july"
+      ]
+    },
+    "memory:memory/2026-06-20.md:1:5": {
+      "key": "memory:memory/2026-06-20.md:1:5",
+      "path": "memory/2026-06-20.md",
+      "startLine": 1,
+      "endLine": 5,
+      "source": "memory",
+      "snippet": "# 2026-06-20 - Q3 quarterly group dinner cron re-checked July 2026 Resy/calendar state. Preferred booking is already confirmed: Washington Square Tavern (Resy venue 77292), Fri 2026-07-10 at 6:30 PM, party of 4, Dining Room, 714 Washington St, Brookline, MA 02446. Julia calendar has matching “Quarterly Dinner @ Washington Square Tavern” event inviting Dylan. No duplicate was created. - Duplicate still exists: Iru (venue 88311) also has a Resy reservation and Julia calendar event for Fri 2026-07-17 at 6:30 PM, party of 4. Do not cancel without Dylan/Julia confirmation because Resy reports cancellation allowed with $60 fee.",
+      "recallCount": 2,
+      "dailyCount": 0,
+      "groundedCount": 0,
+      "totalScore": 1.207885569653492,
+      "maxScore": 0.8265343848085213,
+      "firstRecalledAt": "2026-06-21T10:00:48.927Z",
+      "lastRecalledAt": "2026-06-21T19:39:49.481Z",
+      "queryHashes": [
+        "10315a0354f8",
+        "9ef6bb7fa072"
+      ],
+      "recallDays": [
+        "2026-06-21"
+      ],
+      "conceptTags": [
+        "re-checked",
+        "resy/calendar",
+        "dylan/julia",
+        "quarterly",
+        "group",
+        "dinner",
+        "cron",
+        "checked"
+      ]
+    },
+    "memory:memory/2026-06-21.md:1:7": {
+      "key": "memory:memory/2026-06-21.md:1:7",
+      "path": "memory/2026-06-21.md",
+      "startLine": 1,
+      "endLine": 7,
+      "source": "memory",
+      "snippet": "# 2026-06-21 - Weekly financial scrape cron ran at 04:05 ET. Tesla, Eversource (recovered after Tier 2 re-auth), National Grid electric (recovered after Tier 2 re-auth), National Grid gas, and BWSC (recovered after Tier 2 re-auth) completed. Imports all ran successfully afterward. - PennyMac mortgage failed end-to-end: headless scrape reached `https://mypennymac.pennymac.com/maintenance.html` and could not obtain bearer token; corrected one-time Tier 2 re-auth with `--lender pennymac --re-auth --headless` also landed on maintenance page with no login fields. - BoA mortgage failed end-to-end: cookie replay expired; raw-CDP fallback found Pinchtab Chrome at `127.0.0.1:9869` but no existing `b",
+      "recallCount": 1,
+      "dailyCount": 0,
+      "groundedCount": 0,
+      "totalScore": 0.4136709541082382,
+      "maxScore": 0.4136709541082382,
+      "firstRecalledAt": "2026-06-21T11:15:13.757Z",
+      "lastRecalledAt": "2026-06-21T11:15:13.757Z",
+      "queryHashes": [
+        "96465360b0f0"
+      ],
+      "recallDays": [
+        "2026-06-21"
+      ],
+      "conceptTags": [
+        "re-auth",
+        "end-to-end",
+        "one-time",
+        "raw-cdp",
+        "127.0.0.1",
+        "weekly",
+        "financial",
+        "scrape"
+      ]
+    },
+    "memory:memory/2026-06-21.md:1:5": {
+      "key": "memory:memory/2026-06-21.md:1:5",
+      "path": "memory/2026-06-21.md",
+      "startLine": 1,
+      "endLine": 5,
+      "source": "memory",
+      "snippet": "# 2026-06-21 - Weekly financial scrape cron ran at 04:05 ET. Tesla, Eversource (recovered after Tier 2 re-auth), National Grid electric (recovered after Tier 2 re-auth), National Grid gas, and BWSC (recovered after Tier 2 re-auth) completed. Imports all ran successfully afterward. - PennyMac mortgage initially failed end-to-end during weekly scrape: headless scrape reached `https://mypennymac.pennymac.com/maintenance.html` and could not obtain bearer token; corrected one-time Tier 2 re-auth with `--lender pennymac --re-auth --headless` also landed on maintenance page with no login fields. Later same morning, maintenance was over: `scrape_mortgage.py --lender pennymac --headless --merge` aut",
+      "recallCount": 1,
+      "dailyCount": 0,
+      "groundedCount": 0,
+      "totalScore": 0.45825863182544707,
+      "maxScore": 0.45825863182544707,
+      "firstRecalledAt": "2026-06-21T11:23:07.451Z",
+      "lastRecalledAt": "2026-06-21T11:23:07.451Z",
+      "queryHashes": [
+        "ad3536bb184b"
+      ],
+      "recallDays": [
+        "2026-06-21"
+      ],
+      "conceptTags": [
+        "re-auth",
+        "end-to-end",
+        "one-time",
+        "scrape-mortgage.py",
+        "weekly",
+        "financial",
+        "scrape",
+        "cron"
+      ]
+    },
+    "memory:memory/2026-06-21.md:7:10": {
+      "key": "memory:memory/2026-06-21.md:7:10",
+      "path": "memory/2026-06-21.md",
+      "startLine": 7,
+      "endLine": 10,
+      "source": "memory",
+      "snippet": "- Plaid sync was skipped during 04:05 cron because `~/repos/financial-dashboard/.env` did not have `PLAID_CLIENT_ID` set according to the cron check. Dylan supplied client ID `6a340232605947000d51490c`; added it to `.env`, then manually ran `PLAID_ENV=production ./venv/bin/python3 update_data.py sync` successfully. Production Plaid status OK: 10 Items synced at ~07:25 ET, 24 accounts, 715 transactions, income quality 0 pending review. - Q3 quarterly group dinner cron re-checked July 2026 Resy/calendar state. Preferred booking is already confirmed: Washington Square Tavern (Resy venue 77292), Fri 2026-07-10 at 6:30 PM, party of 4, Dining Room, 714 Washington St, Brookline, MA 02446. Julia cal",
+      "recallCount": 1,
+      "dailyCount": 0,
+      "groundedCount": 0,
+      "totalScore": 0.6913765793029836,
+      "maxScore": 0.6913765793029836,
+      "firstRecalledAt": "2026-06-21T19:39:49.481Z",
+      "lastRecalledAt": "2026-06-21T19:39:49.481Z",
+      "queryHashes": [
+        "9ef6bb7fa072"
+      ],
+      "recallDays": [
+        "2026-06-21"
+      ],
+      "conceptTags": [
+        "repos/financial-dashboard",
+        "plaid-client-id",
+        "plaid-env",
+        "venv/bin/python3",
+        "update-data.py",
+        "re-checked",
+        "resy/calendar",
+        "plaid"
+      ]
+    }
+  }
+}

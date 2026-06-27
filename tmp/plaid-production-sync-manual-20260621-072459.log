@@ -1,0 +1,54 @@
+log=/Users/dbochman/.openclaw/workspace/tmp/plaid-production-sync-manual-20260621-072459.log
+--- production plaid sync
+Syncing American Express...
+  1 accounts, balances snapshotted
+  Transactions: +0 ~0 -0
+Syncing American Express...
+  1 accounts, balances snapshotted
+  Transactions: +0 ~0 -0
+Syncing Betterment...
+  2 accounts, balances snapshotted
+  Transactions: +0 ~0 -0
+  35 holdings snapshotted
+Syncing Charles Schwab...
+  Transactions: not requested; skipped
+  2 investment accounts, 1 holdings snapshotted
+Syncing Chase...
+  1 accounts, balances snapshotted
+  Transactions: +0 ~0 -0
+Syncing Fidelity...
+  Transactions: not requested; skipped
+  4 investment accounts, 3 holdings snapshotted
+Syncing Fidelity...
+  Transactions: not requested; skipped
+  2 investment accounts, 2 holdings snapshotted
+Syncing USAA...
+  4 accounts, balances snapshotted
+  Transactions: +0 ~0 -0
+Syncing USAA...
+  4 accounts, balances snapshotted
+  Transactions: +0 ~0 -0
+Syncing Vanguard...
+  Transactions: not requested; skipped
+  3 investment accounts, 7 holdings snapshotted
+Income quality: 14 automatic payroll, 3 automatic exclusions, 0 pending review.
+
+Sync complete. Status: ok
+--- status
+Last sync: 2026-06-21 11:25:29
+Status: ok
+
+Data sources:
+  American Express [plaid/production]: ok; last synced 2026-06-21T07:25:09.105798
+  American Express [plaid/production]: ok; last synced 2026-06-21T07:25:04.682589
+  Betterment [plaid/production]: ok; last synced 2026-06-21T07:25:12.821497
+  Charles Schwab [plaid/production]: ok; last synced 2026-06-21T07:25:13.215199
+  Chase [plaid/production]: ok; last synced 2026-06-21T07:25:15.853345
+  Fidelity [plaid/production]: ok; last synced 2026-06-21T07:25:16.376735
+  Fidelity [plaid/production]: ok; last synced 2026-06-21T07:25:16.800272
+  USAA [plaid/production]: ok; last synced 2026-06-21T07:25:24.850217
+  USAA [plaid/production]: ok; last synced 2026-06-21T07:25:28.946269
+  Vanguard [plaid/production]: ok; last synced 2026-06-21T07:25:29.486291
+
+24 accounts, 715 transactions in database.
+rc=0

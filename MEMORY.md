@@ -107,6 +107,14 @@
 
 ## Infrastructure Changes
 
+**2026-05-23:**
+- Vacancy script upgraded: Eight Sleep now uses `away start`/`end` (proper away mode) instead of `off`/`on` (simple thermal pause). Better for extended absences.
+- 8sleep CLI refactored with `--location <crosstown|cabin>` flag for future second Pod support
+- Historical: BB routing improvements deployed to SOUL.md and TOOLS.md — `any;-;` chat GUIDs avoided old BlueBubbles lookup timeouts. This no longer applies to normal operation after native iMessage cutover.
+
+**2026-06-27:**
+- OpenClaw migrated from BlueBubbles to native `imsg`-backed iMessage. Active sends use `channel: imessage` and stable targets `chat_id:171` (Dylan), `chat_id:1` (Julia), and `chat_id:170` (Dylan+Julia group). BlueBubbles is rollback-only during soak.
+
 **2026-04-05:**
 - August smart lock skill deployed and verified working (Crosstown front door: locked, 96% battery, WiFi -47dBm)
 - Lock integrated into vacancy-actions.sh — auto-locks when Crosstown becomes confirmed_vacant
@@ -204,4 +212,5 @@
 
 ## Key Contacts
 
+- **Cameron (Cam) Bochman** (+1-781-626-1562): Dylan's brother. Trusted contact (full actions, keep Dylan informed). First interaction 2026-05-12 — messaged asking about birthday ideas for Dylan, got stonewalled by untrusted-contact protocol before Dylan confirmed identity. Now fully trusted.
 - **Hamed Silatani** (hamed@uptimelabs.io): Security/incident response simulation workshops; draft reply pending in Gmail

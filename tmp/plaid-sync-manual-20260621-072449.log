@@ -1,0 +1,21 @@
+log=/Users/dbochman/.openclaw/workspace/tmp/plaid-sync-manual-20260621-072449.log
+--- plaid sync
+No sandbox Plaid Items are linked. Run: python update_data.py link
+--- status
+Last sync: 2026-06-21 11:15:34
+Status: ok
+
+Data sources:
+  American Express [plaid/production]: ok; last synced 2026-06-21T07:15:15.214852
+  American Express [plaid/production]: ok; last synced 2026-06-21T07:15:10.822943
+  Betterment [plaid/production]: ok; last synced 2026-06-21T07:15:20.242626
+  Charles Schwab [plaid/production]: ok; last synced 2026-06-21T07:15:20.825271
+  Chase [plaid/production]: ok; last synced 2026-06-21T07:15:24.834652
+  Fidelity [plaid/production]: ok; last synced 2026-06-21T07:15:25.322337
+  Fidelity [plaid/production]: ok; last synced 2026-06-21T07:15:25.765297
+  USAA [plaid/production]: ok; last synced 2026-06-21T07:15:29.400668
+  USAA [plaid/production]: ok; last synced 2026-06-21T07:15:33.717578
+  Vanguard [plaid/production]: ok; last synced 2026-06-21T07:15:34.152530
+
+24 accounts, 715 transactions in database.
+rc=0

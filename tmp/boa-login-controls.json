@@ -1,0 +1,624 @@
+[
+  {
+    "i": 0,
+    "tag": "A",
+    "id": "ada-skip-link",
+    "name": "",
+    "type": "",
+    "href": "https://secure.bankofamerica.com/login/sign-in/signOnV2Screen.go?request_locale=en-us#skip-to-h1",
+    "text": "Skip to main content",
+    "visible": true,
+    "rect": {
+      "x": -10000,
+      "y": 0,
+      "w": 200,
+      "h": 20
+    }
+  },
+  {
+    "i": 2,
+    "tag": "A",
+    "id": "",
+    "name": "spanish_toggle",
+    "type": "",
+    "href": "https://secure.bankofamerica.com/login/languageToggle.go?request_locale=es_US",
+    "text": "En español",
+    "visible": true,
+    "rect": {
+      "x": 1219.8125,
+      "y": 60,
+      "w": 70.1875,
+      "h": 16.5
+    }
+  },
+  {
+    "i": 3,
+    "tag": "INPUT",
+    "id": "csrfTokenHidden",
+    "name": "csrfTokenHidden",
+    "type": "hidden",
+    "text": "ba9287f69aa0e48e",
+    "visible": false,
+    "rect": {
+      "x": 0,
+      "y": 0,
+      "w": 0,
+      "h": 0
+    }
+  },
+  {
+    "i": 5,
+    "tag": "INPUT",
+    "id": "lpOlbResetErrorCounterId",
+    "name": "lpOlbResetErrorCounter",
+    "type": "hidden",
+    "text": "0",
+    "visible": false,
+    "rect": {
+      "x": 0,
+      "y": 0,
+      "w": 0,
+      "h": 0
+    }
+  },
+  {
+    "i": 6,
+    "tag": "INPUT",
+    "id": "lpPasscodeErrorCounterId",
+    "name": "lpPasscodeErrorCounter",
+    "type": "hidden",
+    "text": "0",
+    "visible": false,
+    "rect": {
+      "x": 0,
+      "y": 0,
+      "w": 0,
+      "h": 0
+    }
+  },
+  {
+    "i": 7,
+    "tag": "INPUT",
+    "id": "contGsid",
+    "name": "contGsid",
+    "type": "hidden",
+    "text": "",
+    "visible": false,
+    "rect": {
+      "x": 0,
+      "y": 0,
+      "w": 0,
+      "h": 0
+    }
+  },
+  {
+    "i": 10,
+    "tag": "INPUT",
+    "id": "passcodeVal",
+    "name": "passcode",
+    "type": "hidden",
+    "text": "",
+    "visible": false,
+    "rect": {
+      "x": 0,
+      "y": 0,
+      "w": 0,
+      "h": 0
+    }
+  },
+  {
+    "i": 11,
+    "tag": "INPUT",
+    "id": "onlineIdVal",
+    "name": "onlineId",
+    "type": "hidden",
+    "text": "",
+    "visible": false,
+    "rect": {
+      "x": 0,
+      "y": 0,
+      "w": 0,
+      "h": 0
+    }
+  },
+  {
+    "i": 12,
+    "tag": "INPUT",
+    "id": "enterID-input",
+    "name": "dummy-onlineId",
+    "type": "text",
+    "text": "",
+    "visible": true,
+    "rect": {
+      "x": 335,
+      "y": 237,
+      "w": 215,
+      "h": 24
+    }
+  },
+  {
+    "i": 13,
+    "tag": "INPUT",
+    "id": "remID",
+    "name": "saveMyID",
+    "type": "checkbox",
+    "text": "on",
+    "visible": true,
+    "rect": {
+      "x": 335,
+      "y": 271,
+      "w": 15,
+      "h": 13
+    }
+  },
+  {
+    "i": 14,
+    "tag": "A",
+    "id": "",
+    "name": "online-id-help",
+    "type": "",
+    "href": "javascript:void(0);",
+    "text": "Online ID Help\n layer",
+    "visible": true,
+    "rect": {
+      "x": 463.15625,
+      "y": 269,
+      "w": 18,
+      "h": 21
+    }
+  },
+  {
+    "i": 15,
+    "tag": "INPUT",
+    "id": "",
+    "name": "new-passcode",
+    "type": "password",
+    "text": "",
+    "visible": false,
+    "rect": {
+      "x": 0,
+      "y": 0,
+      "w": 0,
+      "h": 0
+    }
+  },
+  {
+    "i": 16,
+    "tag": "INPUT",
+    "id": "tlpvt-passcode-input",
+    "name": "dummy-passcode",
+    "type": "password",
+    "text": "",
+    "visible": true,
+    "rect": {
+      "x": 335,
+      "y": 360,
+      "w": 215,
+      "h": 24
+    }
+  },
+  {
+    "i": 17,
+    "tag": "INPUT",
+    "id": "_ib",
+    "name": "_ib",
+    "type": "hidden",
+    "text": "{\"oidkeypress\":false,\"oidpaste\":false,\"pckeypress\":false,\"pcpaste\":false,\"userAgent\":\"Mozilla/5.0 (Macintosh; Intel Mac ",
+    "visible": false,
+    "rect": {
+      "x": 0,
+      "y": 0,
+      "w": 0,
+      "h": 0
+    }
+  },
+  {
+    "i": 18,
+    "tag": "A",
+    "id": "",
+    "name": "forgot-your-passcode",
+    "type": "",
+    "href": "https://secure.bankofamerica.com/login/reset/entry/forgotIDPwdScreen.go",
+    "text": "Forgot your Password?",
+    "visible": true,
+    "rect": {
+      "x": 335,
+      "y": 408,
+      "w": 124.0625,
+      "h": 18
+    }
+  },
+  {
+    "i": 19,
+    "tag": "A",
+    "id": "login_button",
+    "name": "enter-online-id-submit",
+    "type": "",
+    "href": "javascript:void(0);",
+    "text": "Log In",
+    "visible": true,
+    "rect": {
+      "x": 335,
+      "y": 457,
+      "w": 84,
+      "h": 26
+    }
+  },
+  {
+    "i": 20,
+    "tag": "A",
+    "id": "signin-mobile-app",
+    "name": "signin-mobile-app",
+    "type": "",
+    "href": "javascript:void(0);",
+    "text": "Log In with mobile app",
+    "visible": false,
+    "rect": {
+      "x": 0,
+      "y": 0,
+      "w": 0,
+      "h": 0
+    }
+  },
+  {
+    "i": 21,
+    "tag": "A",
+    "id": "signin-with-passcode",
+    "name": "signin-with-passcode",
+    "type": "",
+    "href": "javascript:void(0);",
+    "text": "Log In with Password",
+    "visible": false,
+    "rect": {
+      "x": 0,
+      "y": 0,
+      "w": 0,
+      "h": 0
+    }
+  },
+  {
+    "i": 22,
+    "tag": "A",
+    "id": "signin-with-windows-hello",
+    "name": "signin-with-windows-hello",
+    "type": "",
+    "href": "javascript:void(0);",
+    "text": "Log in with Windows Hello",
+    "visible": false,
+    "rect": {
+      "x": 0,
+      "y": 0,
+      "w": 0,
+      "h": 0
+    }
+  },
+  {
+    "i": 24,
+    "tag": "A",
+    "id": "",
+    "name": "",
+    "type": "",
+    "href": "javascript:void(0);",
+    "text": "Log In with Password instead",
+    "visible": false,
+    "rect": {
+      "x": 0,
+      "y": 0,
+      "w": 0,
+      "h": 0
+    }
+  },
+  {
+    "i": 26,
+    "tag": "A",
+    "id": "",
+    "name": "",
+    "type": "",
+    "href": "javascript:void(0);",
+    "text": "Log In with Password instead",
+    "visible": false,
+    "rect": {
+      "x": 0,
+      "y": 0,
+      "w": 0,
+      "h": 0
+    }
+  },
+  {
+    "i": 27,
+    "tag": "A",
+    "id": "",
+    "name": "",
+    "type": "",
+    "href": "javascript:void(0);",
+    "text": "Log In with Password instead",
+    "visible": false,
+    "rect": {
+      "x": 0,
+      "y": 0,
+      "w": 0,
+      "h": 0
+    }
+  },
+  {
+    "i": 28,
+    "tag": "INPUT",
+    "id": "_iaID",
+    "name": "_ia",
+    "type": "hidden",
+    "text": "",
+    "visible": false,
+    "rect": {
+      "x": 0,
+      "y": 0,
+      "w": 0,
+      "h": 0
+    }
+  },
+  {
+    "i": 29,
+    "tag": "INPUT",
+    "id": "_scID",
+    "name": "_sc",
+    "type": "hidden",
+    "text": "W3sidHlwZSI6IkUiLCJoYXNoIjoiZjBmOTgyOWU3NTZmNGY3NWMzNDQwYTBmMjA2Zjc5YjAyM2Y4OTBkNTdkM2RjNzhjM2NjMTU5ZDExY2FmM2Q1NCIsInNp",
+    "visible": false,
+    "rect": {
+      "x": 0,
+      "y": 0,
+      "w": 0,
+      "h": 0
+    }
+  },
+  {
+    "i": 30,
+    "tag": "INPUT",
+    "id": "u2supportID",
+    "name": "_u2support",
+    "type": "hidden",
+    "text": "",
+    "visible": false,
+    "rect": {
+      "x": 0,
+      "y": 0,
+      "w": 0,
+      "h": 0
+    }
+  },
+  {
+    "i": 31,
+    "tag": "INPUT",
+    "id": "webAuthAPIID",
+    "name": "webAuthAPI",
+    "type": "hidden",
+    "text": "true",
+    "visible": false,
+    "rect": {
+      "x": 0,
+      "y": 0,
+      "w": 0,
+      "h": 0
+    }
+  },
+  {
+    "i": 32,
+    "tag": "A",
+    "id": "choose-device-get-the-app",
+    "name": "choose-device-get-the-app",
+    "type": "",
+    "href": "javascript:void(0);",
+    "text": "Get the app\n  link opens a new info modal layer",
+    "visible": true,
+    "rect": {
+      "x": 885,
+      "y": 357,
+      "w": 114.03125,
+      "h": 36
+    }
+  },
+  {
+    "i": 33,
+    "tag": "A",
+    "id": "{storeId}",
+    "name": "{storeName}",
+    "type": "",
+    "href": "https://secure.bankofamerica.com/login/sign-in/%7BstoreLink%7D",
+    "text": "{storeLinkText}",
+    "visible": false,
+    "rect": {
+      "x": 0,
+      "y": 0,
+      "w": 0,
+      "h": 0
+    }
+  },
+  {
+    "i": 35,
+    "tag": "INPUT",
+    "id": "tlpvt-mob_app_download_email_id",
+    "name": "mobile_app_download_email_id",
+    "type": "text",
+    "text": "",
+    "visible": false,
+    "rect": {
+      "x": 0,
+      "y": 0,
+      "w": 0,
+      "h": 0
+    }
+  },
+  {
+    "i": 41,
+    "tag": "A",
+    "id": "",
+    "name": "Forgot ID/Password?",
+    "type": "",
+    "href": "https://secure.bankofamerica.com/login/reset/entry/forgotIDPwdScreen.go",
+    "text": "Forgot ID/Password?",
+    "visible": true,
+    "rect": {
+      "x": 1069,
+      "y": 251,
+      "w": 114.921875,
+      "h": 16.5
+    }
+  },
+  {
+    "i": 42,
+    "tag": "A",
+    "id": "",
+    "name": "Problem logging in?",
+    "type": "",
+    "href": "https://www.bankofamerica.com/customer-service/contact-us/bank-of-america-login-issues/",
+    "text": "Problem logging in?",
+    "visible": true,
+    "rect": {
+      "x": 1069,
+      "y": 282.5,
+      "w": 109.078125,
+      "h": 16.5
+    }
+  },
+  {
+    "i": 43,
+    "tag": "A",
+    "id": "",
+    "name": "Enroll_now",
+    "type": "",
+    "href": "https://secure.bankofamerica.com/login/enroll/entry/olbEnroll.go?reason=model_enroll",
+    "text": "Enroll now\nfor online Banking",
+    "visible": true,
+    "rect": {
+      "x": 1069,
+      "y": 379,
+      "w": 57.84375,
+      "h": 16.5
+    }
+  },
+  {
+    "i": 44,
+    "tag": "A",
+    "id": "",
+    "name": "Learn_more_about_Online_Banking_dotcom",
+    "type": "",
+    "href": "https://www.bankofamerica.com/onlinebanking/learning-center.go",
+    "text": "Learn more about Online Banking",
+    "visible": true,
+    "rect": {
+      "x": 1069,
+      "y": 410.5,
+      "w": 186.09375,
+      "h": 16.5
+    }
+  },
+  {
+    "i": 45,
+    "tag": "A",
+    "id": "",
+    "name": "Service_Agreement_dotcom",
+    "type": "",
+    "href": "https://www.bankofamerica.com/online-banking/service-agreement.go",
+    "text": "Service Agreement",
+    "visible": true,
+    "rect": {
+      "x": 1069,
+      "y": 442,
+      "w": 105.171875,
+      "h": 16.5
+    }
+  },
+  {
+    "i": 46,
+    "tag": "A",
+    "id": "",
+    "name": "Privacy_&_Security_footer",
+    "type": "",
+    "href": "https://www.bankofamerica.com/security-center/privacy-overview/",
+    "text": "Privacy",
+    "visible": true,
+    "rect": {
+      "x": 335,
+      "y": 624,
+      "w": 49.5,
+      "h": 16.5
+    }
+  },
+  {
+    "i": 47,
+    "tag": "A",
+    "id": "",
+    "name": "Security",
+    "type": "",
+    "href": "https://www.bankofamerica.com/security-center/overview/",
+    "text": "Security",
+    "visible": true,
+    "rect": {
+      "x": 394.5,
+      "y": 624,
+      "w": 55.28125,
+      "h": 16.5
+    }
+  },
+  {
+    "i": 48,
+    "tag": "A",
+    "id": "",
+    "name": "Your Privacy Choices",
+    "type": "",
+    "href": "javascript:OneTrust.ToggleInfoDisplay();",
+    "text": "Your Privacy Choices",
+    "visible": true,
+    "rect": {
+      "x": 459.78125,
+      "y": 624,
+      "w": 113.984375,
+      "h": 16.5
+    }
+  },
+  {
+    "i": 49,
+    "tag": "A",
+    "id": "",
+    "name": "Equal_Housing_Lender",
+    "type": "",
+    "href": "https://www.bankofamerica.com/help/equalhousing-popup/",
+    "text": "Equal Housing Lender",
+    "visible": true,
+    "rect": {
+      "x": 544.671875,
+      "y": 653.5,
+      "w": 140.34375,
+      "h": 13
+    }
+  },
+  {
+    "i": 56,
+    "tag": "INPUT",
+    "id": "ot-group-id-CCBA",
+    "name": "ot-group-id-CCBA",
+    "type": "checkbox",
+    "text": "on",
+    "visible": false,
+    "rect": {
+      "x": 0,
+      "y": 0,
+      "w": 0,
+      "h": 0
+    }
+  },
+  {
+    "i": 64,
+    "tag": "INPUT",
+    "id": "chkbox-id",
+    "name": "",
+    "type": "checkbox",
+    "text": "on",
+    "visible": false,
+    "rect": {
+      "x": 0,
+      "y": 0,
+      "w": 0,
+      "h": 0
+    }
+  }
+]

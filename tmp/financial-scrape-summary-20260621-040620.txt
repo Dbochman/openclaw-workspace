@@ -1,0 +1,4 @@
+log=/Users/dbochman/.openclaw/workspace/tmp/financial-scrape-20260621-040620.log
+failures=2
+PennyMac mortgage | tier=Tier 2 | recovery=--re-auth failed | result=original failed
+BOA mortgage | tier=guarded BoA | recovery=verify-auth cdp_unavailable; credential submission skipped | result=Pinchtab tab unavailable; Dylan should VNC into the Mini

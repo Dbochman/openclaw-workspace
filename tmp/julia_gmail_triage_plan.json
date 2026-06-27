@@ -1,0 +1,191 @@
+{
+  "result": {
+    "schemaVersion": 1,
+    "status": "ok",
+    "date": "2026-06-25",
+    "processed": 17,
+    "markedRead": 17,
+    "leftUnread": 0,
+    "draftsCreated": 0,
+    "draftsExisting": 0,
+    "archived": 0,
+    "trashed": 0,
+    "unreadAfter": [],
+    "attention": [],
+    "errors": []
+  },
+  "plan": [
+    {
+      "id": "19efc584b64c7f25",
+      "from": "Wall Control <hello@wallcontrol.info>",
+      "subject": "Did you see something you liked?",
+      "label": "Newsletters",
+      "markRead": true,
+      "attention": false,
+      "draftStatus": "none",
+      "reason": "newsletter, digest, marketing, or promotion"
+    },
+    {
+      "id": "19efc57da1dde85e",
+      "from": "Wall Control <info@wallcontrol.com>",
+      "subject": "Order #1592843 confirmed",
+      "label": "Shopping",
+      "markRead": true,
+      "attention": false,
+      "draftStatus": "none",
+      "reason": "order/receipt/shipping/delivery update"
+    },
+    {
+      "id": "19efbed00e4d0dd5",
+      "from": "Dylan Bochman <dylanbochman@gmail.com>",
+      "subject": "Accepted: Will/Ayesha Lunch @ Sun Jun 28, 2026 1pm - 3pm (EDT) (Julia Joy Jennings)",
+      "label": "Social",
+      "markRead": true,
+      "attention": false,
+      "draftStatus": "none",
+      "reason": "social/event/calendar notification"
+    },
+    {
+      "id": "19efb896fb7ed214",
+      "from": "Google Alerts <googlealerts-noreply@google.com>",
+      "subject": "Google Alert - Weekly Digest",
+      "label": "Newsletters",
+      "markRead": true,
+      "attention": false,
+      "draftStatus": "none",
+      "reason": "newsletter, digest, marketing, or promotion"
+    },
+    {
+      "id": "19efb83ed7ee5cfd",
+      "from": "Petco <orders@petco.narvar.com>",
+      "subject": "Your package has arrived!",
+      "label": "Shopping",
+      "markRead": true,
+      "attention": false,
+      "draftStatus": "none",
+      "reason": "order/receipt/shipping/delivery update"
+    },
+    {
+      "id": "19efb19bf8adccb3",
+      "from": "Walmart Customer Experience <walmartcustomerexperience@feedback.walmart.com>",
+      "subject": "Take our survey and you could win $1000!",
+      "label": "Newsletters",
+      "markRead": true,
+      "attention": false,
+      "draftStatus": "none",
+      "reason": "newsletter, digest, marketing, or promotion"
+    },
+    {
+      "id": "19efacff09cd715d",
+      "from": "Oura <no-reply@m.ouraring.com>",
+      "subject": "Up to 44% off your Oura Ring 4 upgrade",
+      "label": "Newsletters",
+      "markRead": true,
+      "attention": false,
+      "draftStatus": "none",
+      "reason": "newsletter, digest, marketing, or promotion"
+    },
+    {
+      "id": "19efa6c761482489",
+      "from": "Delta Dental of Massachusetts <hello@deltadentalmass.com>",
+      "subject": "Start summer strong with a healthier smile",
+      "label": "Newsletters",
+      "markRead": true,
+      "attention": false,
+      "draftStatus": "none",
+      "reason": "newsletter, digest, marketing, or promotion"
+    },
+    {
+      "id": "19efa24a7bed8f7b",
+      "from": "LinkedIn Job Alerts <jobalerts-noreply@linkedin.com>",
+      "subject": "Director, Clinical Development (Clinical Science) at Apogee Therapeutics",
+      "label": "Social",
+      "markRead": true,
+      "attention": false,
+      "draftStatus": "none",
+      "reason": "social/event/calendar notification"
+    },
+    {
+      "id": "19efa227d5195777",
+      "from": "\"Mr. Strength & Conditioning Gym\" <upcoming-invoice+acct_1HMQAlBm8YudwlyW@stripe.com>",
+      "subject": "Your Mr. Strength & Conditioning Gym subscription will renew soon",
+      "label": "Financial",
+      "markRead": true,
+      "attention": false,
+      "draftStatus": "none",
+      "reason": "financial/billing/account notice"
+    },
+    {
+      "id": "19ef9d6156560650",
+      "from": "icebreaker <noreply@news-us.icebreaker.com>",
+      "subject": "Our do-it-all polos",
+      "label": "Newsletters",
+      "markRead": true,
+      "attention": false,
+      "draftStatus": "none",
+      "reason": "newsletter, digest, marketing, or promotion"
+    },
+    {
+      "id": "19ef99067f2aa6f2",
+      "from": "Noom <updates@message.noom.com>",
+      "subject": "Your refill is shipping soon!",
+      "label": "Shopping",
+      "markRead": true,
+      "attention": false,
+      "draftStatus": "none",
+      "reason": "order/receipt/shipping/delivery update"
+    },
+    {
+      "id": "19ef98f1f1cc2bf8",
+      "from": "Uber One <uberone@uber.com>",
+      "subject": "Uber One payment confirmation",
+      "label": "Financial",
+      "markRead": true,
+      "attention": false,
+      "draftStatus": "none",
+      "reason": "financial/billing/account notice"
+    },
+    {
+      "id": "19ef97911ddaa5b2",
+      "from": "Venmo <venmo@venmo.com>",
+      "subject": "Your May 2026 transaction history",
+      "label": "Financial",
+      "markRead": true,
+      "attention": false,
+      "draftStatus": "none",
+      "reason": "financial/billing/account notice"
+    },
+    {
+      "id": "19ef96f85ca7594e",
+      "from": "USPS Informed Delivery <USPSInformeddelivery@email.informeddelivery.usps.com>",
+      "subject": "Your Daily Digest for Wed, 6/24 is ready to view",
+      "label": "Shopping",
+      "markRead": true,
+      "attention": false,
+      "draftStatus": "none",
+      "reason": "order/receipt/shipping/delivery update"
+    },
+    {
+      "id": "19ef9646086e575a",
+      "from": "Coinbase <no-reply@info.coinbase.com>",
+      "subject": "Your recurring buy for $200.00 of CBETH is complete",
+      "label": "Financial",
+      "markRead": true,
+      "attention": false,
+      "draftStatus": "none",
+      "reason": "financial/billing/account notice"
+    },
+    {
+      "id": "19ea87a05e60456d",
+      "from": "TREASURY.DIRECT@fiscal.treasury.gov",
+      "subject": "A Message from TreasuryDirect",
+      "label": "Financial",
+      "markRead": true,
+      "attention": false,
+      "draftStatus": "none",
+      "reason": "financial/billing/account notice"
+    }
+  ],
+  "trashCandidates": [],
+  "errors": []
+}

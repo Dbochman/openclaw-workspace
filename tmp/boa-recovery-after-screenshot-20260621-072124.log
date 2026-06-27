@@ -1,0 +1,40 @@
+log=/Users/dbochman/.openclaw/workspace/tmp/boa-recovery-after-screenshot-20260621-072124.log
+--- verify before
+[2026-06-21 07:21:25] boa-tab-verify: not_authenticated
+--- boa re-auth
+[2026-06-21 07:21:59] boa-raw-cdp-reauth: authenticated cookie_total=79 session_cookies=41 persistent_cookies=38 next_cookie_expiry=2026-06-21T07:38:27-04:00
+--- scrape retry
+Mortgage Scraper — Bank of America
+  Property: 19 Crosstown Ave, West Roxbury MA
+==================================================
+  [boa] Trying cookie-replay path (cookies captured 2026-06-21 07:21:59 EDT)...
+  Calling BOA activity API...
+  Home value estimate: $1,098,917
+  Extracted 12 monthly payments
+  ✓ Scraped via stored cookies — Chrome not needed this run.
+
+  Merged with existing data
+
+  Total payments: 12
+    2025-08: $4,856.05  (P=$1,274.63  I=$2,774.80  E=$806.62)  bal=$739,945.79
+    2025-09: $4,856.05  (P=$1,279.41  I=$2,770.02  E=$806.62)  bal=$738,671.16
+    2025-10: $4,840.21  (P=$1,284.21  I=$2,765.22  E=$790.78)  bal=$737,391.75
+    2025-11: $5,000.00  (P=$1,448.82  I=$2,760.40  E=$790.78)  bal=$734,658.72
+    2025-12: $4,840.21  (P=$1,294.46  I=$2,754.97  E=$790.78)  bal=$733,364.26
+    2026-01: $5,000.00  (P=$1,459.10  I=$2,750.12  E=$790.78)  bal=$731,905.16
+    2026-02: $5,000.00  (P=$1,484.98  I=$2,744.64  E=$770.38)  bal=$731,905.16
+    2026-03: $5,000.00  (P=$1,490.54  I=$2,739.08  E=$770.38)  bal=$728,929.64
+    2026-04: $5,000.00  (P=$1,496.13  I=$2,733.49  E=$770.38)  bal=$728,929.64
+    2026-05: $5,000.00  (P=$1,501.74  I=$2,727.88  E=$770.38)  bal=$725,931.77
+    2026-06: $5,000.00  (P=$1,507.38  I=$2,722.24  E=$770.38)  bal=$724,424.39
+    2026-07: $5,000.00  (P=$1,513.03  I=$2,716.59  E=$770.38)  bal=$722,911.36
+
+  Wrote 12 payments to /Users/dbochman/repos/financial-dashboard/boa_mortgage_data.json
+  Next: python update_data.py import-json-boa-mortgage
+--- import
+  Redfin estimate for 19 Crosstown Ave, West Roxbury MA: $1,060,882
+Imported: 1 mortgage accounts, 12 payments
+Run 'python serve_dashboard.py' to view your mortgage dashboard at /mortgage
+--- verify after
+[2026-06-21 07:22:03] boa-tab-verify: authenticated
+rc=0

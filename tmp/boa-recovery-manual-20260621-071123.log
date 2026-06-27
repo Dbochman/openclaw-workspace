@@ -1,0 +1,8 @@
+log=/Users/dbochman/.openclaw/workspace/tmp/boa-recovery-manual-20260621-071123.log
+--- verify before
+[2026-06-21 07:11:25] boa-tab-verify: not_authenticated
+--- boa re-auth
+[2026-06-21 07:12:25] boa-raw-cdp-reauth: login_timeout
+--- verify after
+[2026-06-21 07:12:26] boa-tab-verify: not_authenticated
+rc=1

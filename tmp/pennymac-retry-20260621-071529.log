@@ -1,0 +1,68 @@
+log=/Users/dbochman/.openclaw/workspace/tmp/pennymac-retry-20260621-071529.log
+--- original scrape
+Mortgage Scraper — PennyMac
+  Property: 95 Schoolhouse Rd, Phillipston MA
+==================================================
+  Using saved storage state: /Users/dbochman/repos/financial-dashboard/.pennymac_session/storage_state.json
+
+  Navigating to PennyMac portal...
+  Authenticated successfully.
+
+  Extracting PennyMac auth tokens...
+  Intercepting bearer token from page API calls...
+  Captured bearer token (1152 chars)
+  Got passage token (134 chars)
+  Calling PennyMac loan activity API...
+  Extracted 10 monthly payments
+  Merged with existing data
+
+  Total payments: 10
+    2025-10: $2,400.56  (P=$243.74  I=$1,809.75  E=$347.07)  bal=$304,556.26
+    2025-11: $3,000.00  (P=$844.63  I=$1,808.30  E=$347.07)  bal=$303,711.63
+    2025-12: $3,500.00  (P=$1,349.64  I=$1,803.29  E=$347.07)  bal=$302,361.99
+    2026-01: $4,000.00  (P=$1,857.66  I=$1,795.27  E=$347.07)  bal=$300,504.33
+    2026-02: $4,000.00  (P=$1,868.69  I=$1,784.24  E=$347.07)  bal=$298,635.64
+    2026-03: $4,000.00  (P=$1,879.78  I=$1,773.15  E=$347.07)  bal=$296,755.86
+    2026-04: $4,000.00  (P=$1,890.94  I=$1,761.99  E=$347.07)  bal=$294,864.92
+    2026-05: $4,000.00  (P=$1,902.17  I=$1,750.76  E=$347.07)  bal=$292,962.75
+    2026-06: $4,000.00  (P=$1,913.46  I=$1,739.47  E=$347.07)  bal=$291,049.29
+    2026-07: $6,000.00  (P=$3,897.16  I=$1,728.11  E=$374.73)  bal=$287,152.13
+
+  Wrote 10 payments to /Users/dbochman/repos/financial-dashboard/pennymac_mortgage_data.json
+  Next: python update_data.py import-json-pennymac-mortgage
+--- retry/confirm original scrape
+Mortgage Scraper — PennyMac
+  Property: 95 Schoolhouse Rd, Phillipston MA
+==================================================
+  Using saved storage state: /Users/dbochman/repos/financial-dashboard/.pennymac_session/storage_state.json
+
+  Navigating to PennyMac portal...
+  Authenticated successfully.
+
+  Extracting PennyMac auth tokens...
+  Intercepting bearer token from page API calls...
+  Captured bearer token (1152 chars)
+  Got passage token (134 chars)
+  Calling PennyMac loan activity API...
+  Extracted 10 monthly payments
+  Merged with existing data
+
+  Total payments: 10
+    2025-10: $2,400.56  (P=$243.74  I=$1,809.75  E=$347.07)  bal=$304,556.26
+    2025-11: $3,000.00  (P=$844.63  I=$1,808.30  E=$347.07)  bal=$303,711.63
+    2025-12: $3,500.00  (P=$1,349.64  I=$1,803.29  E=$347.07)  bal=$302,361.99
+    2026-01: $4,000.00  (P=$1,857.66  I=$1,795.27  E=$347.07)  bal=$300,504.33
+    2026-02: $4,000.00  (P=$1,868.69  I=$1,784.24  E=$347.07)  bal=$298,635.64
+    2026-03: $4,000.00  (P=$1,879.78  I=$1,773.15  E=$347.07)  bal=$296,755.86
+    2026-04: $4,000.00  (P=$1,890.94  I=$1,761.99  E=$347.07)  bal=$294,864.92
+    2026-05: $4,000.00  (P=$1,902.17  I=$1,750.76  E=$347.07)  bal=$292,962.75
+    2026-06: $4,000.00  (P=$1,913.46  I=$1,739.47  E=$347.07)  bal=$291,049.29
+    2026-07: $6,000.00  (P=$3,897.16  I=$1,728.11  E=$374.73)  bal=$287,152.13
+
+  Wrote 10 payments to /Users/dbochman/repos/financial-dashboard/pennymac_mortgage_data.json
+  Next: python update_data.py import-json-pennymac-mortgage
+--- import
+  Redfin estimate for 95 Schoolhouse Rd, Phillipston MA: $406,429
+Imported: 1 mortgage accounts, 10 payments
+Run 'python serve_dashboard.py' to view your mortgage dashboard at /mortgage
+rc=0

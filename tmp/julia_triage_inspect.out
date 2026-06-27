@@ -1,0 +1,24 @@
+
+== spam 0 ==
+
+== unread 4 ==
+  1 19ef7662cea1b276 labels=UNREAD,CATEGORY_UPDATES,INBOX
+    From: Heirloom <tracking@shipstation.com>
+    Subj: Your order has been shipped!
+    Date: Wed, 24 Jun 2026 02:12:07 +0000 (UTC)
+    Snip: Dear Julia Jennings, Thank you for your order from Heirloom! We wanted to let you know that your order (#951959) was shipped via FedEx, on 6/23/2026. You can track your package at any time using the
+  2 19ef765fe44de0ee labels=UNREAD,CATEGORY_UPDATES,INBOX
+    From: Heirloom <tracking@shipstation.com>
+    Subj: Your order has been shipped!
+    Date: Wed, 24 Jun 2026 02:11:55 +0000 (UTC)
+    Snip: Dear Julia Jennings, Thank you for your order from Heirloom! We wanted to let you know that your order (#951959) was shipped via FedEx, on 6/23/2026. You can track your package at any time using the
+  3 19ef536433778b03 labels=UNREAD,Label_9,CATEGORY_UPDATES,INBOX
+    From: The Spa at Mandarin Oriental Boston <mobos-spa@mohg.com>
+    Subj: Spa Confirmation
+    Date: Tue, 23 Jun 2026 09:14:48 -0400
+    Snip: Dear Ms. Jennings Warm Greetings from The Spa at Mandarin Oriental, Boston. We are delighted you have scheduled time with us; please take a moment to review your itinerary below before your upcoming
+  4 19ea87a05e60456d labels=UNREAD,Label_9,CATEGORY_UPDATES,INBOX
+    From: TREASURY.DIRECT@fiscal.treasury.gov
+    Subj: A Message from TreasuryDirect
+    Date: Mon, 8 Jun 2026 14:23:49 -0400 (EDT)
+    Snip: Dear Julia, Check the Investor InBox section of your TreasuryDirect account for an important message. Thank you for using TreasuryDirect.

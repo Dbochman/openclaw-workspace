@@ -7,12 +7,12 @@ Skills define _how_ tools work. This file is for _your_ specifics — the stuff 
 CLI at `/opt/homebrew/bin/qmd`. Local hybrid search (BM25 + vector) over all OpenClaw docs. **Use this when you need details not in this file** — device IDs, API endpoints, curl examples, troubleshooting steps, etc.
 
 ```bash
-qmd query "how does the BB watchdog work"    # hybrid search (recommended)
+qmd query "native imessage migration"         # hybrid search (recommended)
 qmd search "cart URL"                         # keyword-only search
 qmd get qmd://skills/grocery-reorder/skill.md # read a specific doc
 ```
 
-Four collections indexed: `workspace` (SOUL/TOOLS/HEARTBEAT), `skills` (all SKILL.md files), `plans` (BB implementation, Private API, workspace state), `bin-scripts` (README, weekly upgrade doc).
+Four collections indexed: `workspace` (SOUL/TOOLS/HEARTBEAT), `skills` (all SKILL.md files), `plans` (native iMessage migration, archived BB implementation, Private API, workspace state), `bin-scripts` (README, weekly upgrade doc).
 
 ## Smart Home Devices
 
@@ -143,34 +143,49 @@ pinchtab ss -o /tmp/screenshot.png  # Screenshot
 - Always `pkill -f pinchtab` when done (auto-spawned servers persist past `daemon stop`).
 - v0.11.0+: `security.allowEvaluate` defaults off (eval returns 403). Profiles now at `~/.pinchtab/profiles/<name>/`. v0.11 transition details: `qmd query "pinchtab 0.11 upgrade"`.
 
-## BlueBubbles
+## iMessage
 
-### Architecture
-
-OpenClaw v2026.3.7+ uses **webhook-only** for BB (no socket.io client). BB POSTs events to `http://localhost:18789/bluebubbles-webhook`. The gateway registers this webhook on startup.
-
-**Gateway health monitor is DISABLED** (`gateway.channelHealthCheckMinutes: 0`). The BB watchdog handles stale detection instead — it only triggers when new messages exist but aren't being delivered.
-
-### Watchdog (`com.openclaw.bb-watchdog`)
-
-Script at `~/.openclaw/workspace/scripts/bb-watchdog.sh`, runs every 60s. Four detection modes (helper down, chat.db observer stall, webhook dead, gateway plugin dead). 15-min cooldown; gateway restarts deferred while cron jobs run (checks `runningAtMs` in `jobs.json`). Details: `qmd query "bb watchdog modes"`.
-
-### Key Gotchas
-
-- **Chat history search: always query by handle, not just chat GUID** — BB sometimes stores DM messages with empty `chats[]` arrays. Use `/api/v1/message/query` with `handle.id = :value` to search by phone/email.
-- **NEVER use soft restart for recovery** — reconnects the Private API helper but does NOT restart the chat.db observer, leaving BB blind to new messages.
-- **BB + gateway restarts must be sequenced** — watchdog waits 15s after BB relaunch before restarting gateway to re-register webhook.
-- Other gotchas (Cloudflare daemon crash, v2026.3.7 import bug): `qmd query "bluebubbles gotchas"`.
+Active transport is native OpenClaw `imessage`, backed by `/opt/homebrew/bin/imsg` and the local Messages database at `~/Library/Messages/chat.db`.
 
 ### Quick Reference
 
-- Base URL: `http://localhost:1234/api/v1`
-- Auth: `?password=${BLUEBUBBLES_PASSWORD}`
-- DM GUIDs: `any;-;<address>` (e.g., `any;-;julia.joy.jennings@gmail.com`)
-- Group GUIDs: `any;+;<chat-identifier-hex>` (e.g., the Dylan+Julia date-night chat is `any;+;7010feab69b14fa19071a88340495f2f`). Older docs said `iMessage;+;` but BB returns `any;+;` as canonical.
-- **Send `target` should be a chat GUID**, not raw phone/email — the plugin's `parseRawChatGuid` routes `<service>;<+|->;<id>` strings as `kind: chat_guid` and skips the slow `/chat/query` + `/chat/new` lookup (saves 30-90s per send to a known contact). See SOUL.md "BlueBubbles routing" for the canonical Dylan / Julia / group-chat targets.
-- Reaction types: `love`, `like`, `dislike`, `laugh`, `emphasize`, `question`
-- For Private API curl examples: `qmd query "bluebubbles private API"`
+```bash
+openclaw channels status --probe --channel imessage
+openclaw message send --channel imessage --target chat_id:171 --message "..."
+imsg status --json
+imsg chats --limit 10 --json
+```
+
+- Dylan DM: `chat_id:171`
+- Julia DM: `chat_id:1`
+- Dylan & Julia group: `chat_id:170`
+- Current cron deliveries use `channel: "imessage"` with `chat_id:*` targets.
+- Native iMessage accepts handles and explicit prefixes (`imessage:`, `sms:`, `auto:`, `chat_id:`, `chat_guid:`, `chat_identifier:`), but prefer `chat_id:*` for known stable chats.
+- Do **not** use BlueBubbles `any;-;` or `any;+;` targets during normal operation.
+- Reaction types remain: `love`, `like`, `dislike`, `laugh`, `emphasize`, `question`.
+
+## BlueBubbles Rollback Only
+
+BlueBubbles remains installed only as a rollback path during the native iMessage soak. OpenClaw runtime config uses `channels.imessage`, not `channels.bluebubbles`, and live cron jobs deliver through native iMessage.
+
+Do not troubleshoot routine iMessage delivery by restarting BlueBubbles. First check native iMessage with:
+
+```bash
+openclaw channels status --probe --channel imessage
+tail -120 ~/.openclaw/logs/gateway.log | grep -i imessage
+imsg status --json
+```
+
+If Dylan explicitly asks for rollback testing:
+
+```bash
+set -a
+source ~/.openclaw/.secrets-cache
+set +a
+openclaw message send --channel bluebubbles --target "any;-;${DYLAN_EMAIL}" --message "BlueBubbles rollback test" --json
+```
+
+BB targets are historical and rollback-only: DM GUIDs use `any;-;<address>`, group GUIDs use `any;+;<chat-identifier-hex>`. Detailed BB internals live in archived plans; search `qmd query "bluebubbles rollback"` or `qmd query "bluebubbles private API"` if rollback is actually active.
 
 ## FindMy Locate
 
@@ -213,13 +228,26 @@ Mac Mini → MacBook Pro SSH via Tailscale (`ssh dylans-macbook-pro`), dedicated
 
 ## Financial Dashboard
 
-Repo `~/repos/financial-dashboard/` on Mini; SPA on port 8585; weekly cron `financial-scrape-0001` (Sundays 4:05 ET) runs 7 scrapers, all self-healing:
+Repo `~/repos/financial-dashboard/` on Mini; canonical finance API and SPA on port 8585. The weekly cron `financial-scrape-0001` (Sundays 4:05 ET) runs 7 scrapers, all self-healing:
 
 - **Tier 1** — Tesla Solar (API only).
 - **Tier 2** — Eversource, NG Electric, NG Gas, BWSC, PennyMac. Playwright with `--re-auth` flag; each saves `storage_state.json` in its `.NAME_session/` dir. PennyMac auto-fetches email-MFA codes from Julia's Gmail via `gws`. Creds at `op://OpenClaw/<url-style-title>/...`.
-- **Tier 2b** — BoA. Bot detection defeats every Playwright-launched approach; instead the scraper does `playwright.chromium.connect_over_cdp(...)` to Pinchtab's already-running Chrome (port discovered by `ps`-grep for `--user-data-dir=~/.pinchtab/profiles`). Bootstrap rare (weeks-months) — user Screen Shares + manually logs in once. Never `page.goto()` or `context.close()` in CDP mode.
+- **Tier 2b** — BoA. Bot detection defeats every Playwright-launched approach, so the scraper uses a narrow raw-CDP WebSocket to Pinchtab's already-running Chrome (port discovered by `ps`-grep for `--user-data-dir=~/.pinchtab/profiles`). After stale cookie replay and an explicitly `not_authenticated` tab, cron may run one `--boa-re-auth` submission; it stops for MFA or any challenge. Never navigate or close Pinchtab Chrome in CDP mode.
 
-Cron prompt at `openclaw cron list --json` (id `financial-scrape-0001`) is the canonical operational spec. Dev architecture: `~/repos/financial-dashboard/CLAUDE.md`. Reusable patterns: skills `playwright-email-mfa-flow`, `playwright-device-trust-bootstrap`, `web-auth-check-by-title-not-url`.
+Cron prompt at `openclaw cron list --json` (id `financial-scrape-0001`) is the canonical operational spec. Its BoA and PennyMac import commands also run the weekly-gated Redfin estimate refresh under the household's existing written permission; a provider failure preserves the prior value. Dev architecture: `~/repos/financial-dashboard/CLAUDE.md`. Reusable patterns: skills `playwright-email-mfa-flow`, `playwright-device-trust-bootstrap`, `web-auth-check-by-title-not-url`.
+
+Production source sync is deliberately separate from that cron: `ai.openclaw.finance-refresh` runs daily at 06:15 local time, invokes the cache-only Plaid wrapper before the crypto wrapper, and never invokes `op`. It writes combined status-only metadata to `~/.openclaw/finance-refresh/status.json` while preserving each component status; `not running` is normal between scheduled executions. The canonical Forecast financial source is `http://127.0.0.1:8585/api/forecast-baseline`, which exposes reconciled aggregate scopes only.
+
+If the same joint account is visible through separate owner logins, treat it as a cross-Item Plaid alias, not two household balances. After verifying the identity, run `./venv/bin/python3 update_data.py reconcile-alias-account ALIAS_ACCOUNT_ID CANONICAL_ACCOUNT_ID "same physical joint account"`. The alias remains raw/auditable but is excluded from canonical transactions, balances, holdings, and Forecast inputs. Ownership tags do not deduplicate sources.
+
+## Forecast Dashboard
+
+Repo `~/repos/Financial Advisor/` on Mini; interactive forecast dashboard on port 8586. It reads `8585` first through localhost, validates the reconciliation and source-coverage gate, then caches `/api/current-snapshot` for five minutes.
+
+- Live inputs: source-backed starting equity/bond/cash allocation, mortgage balances, and provenance-marked Redfin property values; trailing-three-complete-month cash flow is calibration context, not a gross-model input.
+- Model supplements: crypto/art, compensation, salaries, reviewed property fallback values, and any owner scope without a complete linked source.
+- Ownership rule: Combined adds the household scope once. Never infer a missing owner scope as a zero balance.
+- Operational reference: `~/dotfiles/openclaw/FORECAST-DASHBOARD.md`.
 
 ## Dashboards
 
@@ -228,6 +256,7 @@ Cron prompt at `openclaw cron list --json` (id `financial-scrape-0001`) is the c
 | Nest Climate | 8550 | Thermostat + weather + presence |
 | Usage | 8551 | Token consumption + agent activity |
 | Dog Walk | 8552 | Walk history, Fi GPS, Roomba status, route maps |
-| Financial | 8585 | Utilities, mortgage, solar, water |
+| Financial | 8585 | Canonical finance, utilities, mortgage, source reconciliation, and forecast baseline |
+| Forecast | 8586 | Interactive projections seeded from the reconciled current-day baseline |
 
 For API endpoints and UI features: `qmd query "nest dashboard API"` etc.

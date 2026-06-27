@@ -1,0 +1,205 @@
+{
+  "labels": [
+    {
+      "id": "CHAT",
+      "name": "CHAT",
+      "type": "system"
+    },
+    {
+      "id": "SENT",
+      "labelListVisibility": "labelShow",
+      "messageListVisibility": "hide",
+      "name": "SENT",
+      "type": "system"
+    },
+    {
+      "id": "INBOX",
+      "labelListVisibility": "labelShow",
+      "messageListVisibility": "hide",
+      "name": "INBOX",
+      "type": "system"
+    },
+    {
+      "id": "IMPORTANT",
+      "labelListVisibility": "labelShow",
+      "messageListVisibility": "hide",
+      "name": "IMPORTANT",
+      "type": "system"
+    },
+    {
+      "id": "TRASH",
+      "labelListVisibility": "labelShow",
+      "messageListVisibility": "hide",
+      "name": "TRASH",
+      "type": "system"
+    },
+    {
+      "id": "DRAFT",
+      "labelListVisibility": "labelShow",
+      "messageListVisibility": "hide",
+      "name": "DRAFT",
+      "type": "system"
+    },
+    {
+      "id": "SPAM",
+      "labelListVisibility": "labelShow",
+      "messageListVisibility": "hide",
+      "name": "SPAM",
+      "type": "system"
+    },
+    {
+      "id": "CATEGORY_FORUMS",
+      "name": "CATEGORY_FORUMS",
+      "type": "system"
+    },
+    {
+      "id": "CATEGORY_UPDATES",
+      "name": "CATEGORY_UPDATES",
+      "type": "system"
+    },
+    {
+      "id": "CATEGORY_PERSONAL",
+      "name": "CATEGORY_PERSONAL",
+      "type": "system"
+    },
+    {
+      "id": "CATEGORY_PROMOTIONS",
+      "name": "CATEGORY_PROMOTIONS",
+      "type": "system"
+    },
+    {
+      "id": "CATEGORY_SOCIAL",
+      "name": "CATEGORY_SOCIAL",
+      "type": "system"
+    },
+    {
+      "id": "YELLOW_STAR",
+      "name": "YELLOW_STAR",
+      "type": "system"
+    },
+    {
+      "id": "STARRED",
+      "labelListVisibility": "labelShow",
+      "messageListVisibility": "hide",
+      "name": "STARRED",
+      "type": "system"
+    },
+    {
+      "id": "UNREAD",
+      "name": "UNREAD",
+      "type": "system"
+    },
+    {
+      "id": "Label_1",
+      "name": "Notes",
+      "type": "user"
+    },
+    {
+      "id": "Label_10",
+      "labelListVisibility": "labelShow",
+      "messageListVisibility": "show",
+      "name": "OpenClaw/FYI",
+      "type": "user"
+    },
+    {
+      "id": "Label_11",
+      "labelListVisibility": "labelShow",
+      "messageListVisibility": "show",
+      "name": "OpenClaw/Financial",
+      "type": "user"
+    },
+    {
+      "id": "Label_12",
+      "labelListVisibility": "labelShow",
+      "messageListVisibility": "show",
+      "name": "OpenClaw/Shopping",
+      "type": "user"
+    },
+    {
+      "id": "Label_13",
+      "labelListVisibility": "labelShow",
+      "messageListVisibility": "show",
+      "name": "OpenClaw/Newsletters",
+      "type": "user"
+    },
+    {
+      "id": "Label_14",
+      "labelListVisibility": "labelShow",
+      "messageListVisibility": "show",
+      "name": "OpenClaw/Social",
+      "type": "user"
+    },
+    {
+      "id": "Label_1420013218255727183",
+      "name": "Tufts",
+      "type": "user"
+    },
+    {
+      "id": "Label_15",
+      "name": "[Imap]/Drafts",
+      "type": "user"
+    },
+    {
+      "id": "Label_2",
+      "name": "Sent Messages",
+      "type": "user"
+    },
+    {
+      "id": "Label_2475127741417698953",
+      "name": "$$$",
+      "type": "user"
+    },
+    {
+      "id": "Label_3",
+      "name": "Pre Med",
+      "type": "user"
+    },
+    {
+      "id": "Label_4",
+      "labelListVisibility": "labelShow",
+      "messageListVisibility": "show",
+      "name": "Family",
+      "type": "user"
+    },
+    {
+      "id": "Label_4060322089888103283",
+      "name": "Orders",
+      "type": "user"
+    },
+    {
+      "id": "Label_5",
+      "labelListVisibility": "labelShow",
+      "messageListVisibility": "show",
+      "name": "Vet",
+      "type": "user"
+    },
+    {
+      "id": "Label_6",
+      "labelListVisibility": "labelShow",
+      "messageListVisibility": "show",
+      "name": "Work",
+      "type": "user"
+    },
+    {
+      "id": "Label_7",
+      "labelListVisibility": "labelShow",
+      "messageListVisibility": "show",
+      "name": "Recruiter",
+      "type": "user"
+    },
+    {
+      "id": "Label_8",
+      "labelListVisibility": "labelShow",
+      "messageListVisibility": "show",
+      "name": "OpenClaw/Urgent",
+      "type": "user"
+    },
+    {
+      "id": "Label_9",
+      "labelListVisibility": "labelShow",
+      "messageListVisibility": "show",
+      "name": "OpenClaw/Action",
+      "type": "user"
+    }
+  ]
+}

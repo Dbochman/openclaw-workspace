@@ -1,0 +1,355 @@
+[2026-06-21 04:06:20] Financial scrape started
+[2026-06-21 04:06:20] START Tesla solar: ./venv/bin/python3 scrape_tesla_solar.py --merge
+Tesla Solar Scraper (Cabin — Phillipston)
+========================================
+  Email: dylanbochman@gmail.com
+  Range: 2025-06 to 2026-06
+  Site ID: 2252467102008487
+
+Fetching energy data...
+  Fetching energy history... 2053 intervals
+  172 days with data, 1569.3 kWh total generation
+  Merged with existing data (/Users/dbochman/repos/financial-dashboard/solar_cabin_data.json)
+
+  Total readings: 6
+    2026-01: 42.5 kWh generated (31 days)
+    2026-02: 0.4 kWh generated (28 days)
+    2026-03: 285.5 kWh generated (31 days)
+    2026-04: 476.3 kWh generated (30 days)
+    2026-05: 418.2 kWh generated (31 days)
+    2026-06: 346.4 kWh generated (21 days)
+
+  Wrote 6 readings to /Users/dbochman/repos/financial-dashboard/solar_cabin_data.json
+  Next: python update_data.py import-json-solar-cabin
+[2026-06-21 04:06:22] END Tesla solar rc=0
+[2026-06-21 04:06:22] START Eversource original: ./venv/bin/python3 scrape_eversource.py --headless --merge
+Eversource Account Portal Scraper
+========================================
+  Using saved storage state: /Users/dbochman/repos/financial-dashboard/.eversource_session/storage_state.json
+  Not logged in — please log in via the browser window.
+ERROR: Session expired and running in headless mode.
+Fix: Run once without --headless to log in interactively,
+then re-run with --headless.
+[2026-06-21 04:06:28] END Eversource original rc=1
+[2026-06-21 04:06:28] Eversource original failed; attempting Tier 2 --re-auth once
+[2026-06-21 04:06:31] START Eversource re-auth: ./venv/bin/python3 scrape_eversource.py --re-auth --headless
+Eversource re-auth — session dir: /Users/dbochman/repos/financial-dashboard/.eversource_session
+  storage_state target: /Users/dbochman/repos/financial-dashboard/.eversource_session/storage_state.json
+========================================
+  [re-auth] navigating to https://www.eversource.com/security/account/login
+  [re-auth] post-navigate URL: https://www.eversource.com/security/account/login
+  [re-auth] filled username (matched 1 via 'input[name="email"]')
+  [re-auth] filled password (matched 1 via '#password, input[name="password"]')
+  [re-auth] pressed Enter on password field
+  [re-auth] poll start, URL: https://www.eversource.com/security/account/login
+  [re-auth] URL -> https://www.eversource.com/cg/customer/Account#/details/0
+  [re-auth] authenticated, URL: https://www.eversource.com/cg/customer/Account#/details/0
+  [re-auth] saved storage_state to /Users/dbochman/repos/financial-dashboard/.eversource_session/storage_state.json
+[2026-06-21 04:06:42] END Eversource re-auth rc=0
+[2026-06-21 04:06:42] START Eversource retry original: ./venv/bin/python3 scrape_eversource.py --headless --merge
+Eversource Account Portal Scraper
+========================================
+  Using saved storage state: /Users/dbochman/repos/financial-dashboard/.eversource_session/storage_state.json
+  Authenticated successfully.
+
+[1/3] Getting Opower API credentials...
+  Fetching Opower JWT token...
+  Got Opower JWT (914 chars)
+  Fetching Opower account URN...
+  Account URN: urn:opower:v1:account:ever:uuid:589fe191-6e67-11f0-9016-0200170e89ec
+
+[2/3] Fetching bill history...
+  Fetching bill dates (duration=P37M)...
+  Found 26 bills (2024-06-06 to 2026-06-09)
+
+[3/3] Fetching details for 26 bills...
+
+  API results: 24 OK, 2 failed/skipped
+  Merged with existing data (/Users/dbochman/repos/financial-dashboard/utilities_data.json)
+
+  Total readings: 24
+    2024-07: 1085 kWh, $347.31
+    2024-08: 944 kWh, $309.88
+    2024-09: 687 kWh, $228.24
+    2024-10: 558 kWh, $187.25
+    2024-11: 708 kWh, $234.91
+    2024-12: 1106 kWh, $361.36
+    2025-01: 2357 kWh, $767.68
+    2025-02: 1992 kWh, $673.89
+    2025-03: 1882 kWh, $637.22
+    2025-04: 1296 kWh, $391.93
+    2025-05: 1110 kWh, $379.94
+    2025-06: 784 kWh, $271.29
+    2025-07: 856 kWh, $293.98
+    2025-08: 918 kWh, $0.00
+    2025-09: 793 kWh, $270.19
+    2025-10: 606 kWh, $210.40
+    2025-11: 754 kWh, $259.37
+    2025-12: 1187 kWh, $402.56
+    2026-01: 1696 kWh, $557.57
+    2026-02: 3058 kWh, $898.89
+    2026-03: 2019 kWh, $476.63
+    2026-04: 875 kWh, $231.13
+    2026-05: 682 kWh, $229.76
+    2026-06: 682 kWh, $229.76
+
+  Wrote 24 readings to /Users/dbochman/repos/financial-dashboard/utilities_data.json
+  Next: python update_data.py import-json-utilities
+[2026-06-21 04:07:03] END Eversource retry original rc=0
+[2026-06-21 04:07:03] START National Grid electric original: ./venv/bin/python3 scrape_national_grid_electric.py --headless --merge
+National Grid Electric Scraper (Cabin — Phillipston)
+========================================
+  Using saved storage state: /Users/dbochman/repos/financial-dashboard/.nationalgrid_session/storage_state.json
+  Not logged in — please log in via the browser window.
+ERROR: Session expired and running in headless mode.
+Fix: Run once without --headless to log in interactively,
+then re-run with --headless.
+[2026-06-21 04:07:10] END National Grid electric original rc=1
+[2026-06-21 04:07:10] National Grid electric original failed; attempting Tier 2 --re-auth once
+[2026-06-21 04:07:12] START National Grid electric re-auth: ./venv/bin/python3 scrape_national_grid_electric.py --re-auth --headless
+National Grid re-auth — session dir: /Users/dbochman/repos/financial-dashboard/.nationalgrid_session
+  storage_state target: /Users/dbochman/repos/financial-dashboard/.nationalgrid_session/storage_state.json
+========================================
+  [re-auth] navigating to https://myaccount.nationalgrid.com
+  [re-auth] post-navigate URL: https://myaccount.nationalgrid.com/
+  [re-auth] filled username (matched 1 via '#signInName, #email, input[type="email"]')
+  [re-auth] filled password (matched 1 via '#password, input[type="password"]')
+  [re-auth] pressed Enter on password field
+  [re-auth] poll start, URL: https://login.nationalgrid.com/login.nationalgridus.com/b2c_1a_nationalgrid_convert_merge_signin/oauth2/v2.0/authorize?client_id=88d004b4-3d39-4599-b410-093849907ee5&scope=88d004b4-3d39-4599-b410-093849907ee5%20openid%20profile%20offline_access&redirect_uri=https%3A%2F%2Fmyaccount.nationalgrid.com%2Fauth-landing&client-request-id=019ee938-2a1b-7960-ac42-ff42b918051b&response_mode=fragment&response_type=code&x-client-SKU=msal.js.browser&x-client-VER=3.30.0&client_info=1&code_challenge=7CZudkKnI6Pz8D1KNm0odzOPvMdtn2baTkW2If2BIEU&code_challenge_method=S256&nonce=019ee938-2a1b-7465-9093-046ae24382c8&state=eyJpZCI6IjAxOWVlOTM4LTJhMWItN2M5Ni1iMGFkLTBhOWFmMjUxZmI0ZSIsIm1ldGEiOnsiaW50ZXJhY3Rpb25UeXBlIjoicmVkaXJlY3QifX0%3D&region=nyupstate&customer_type=home
+  [re-auth] authenticated, URL: https://login.nationalgrid.com/login.nationalgridus.com/b2c_1a_nationalgrid_convert_merge_signin/oauth2/v2.0/authorize?client_id=88d004b4-3d39-4599-b410-093849907ee5&scope=88d004b4-3d39-4599-b410-093849907ee5%20openid%20profile%20offline_access&redirect_uri=https%3A%2F%2Fmyaccount.nationalgrid.com%2Fauth-landing&client-request-id=019ee938-2a1b-7960-ac42-ff42b918051b&response_mode=fragment&response_type=code&x-client-SKU=msal.js.browser&x-client-VER=3.30.0&client_info=1&code_challenge=7CZudkKnI6Pz8D1KNm0odzOPvMdtn2baTkW2If2BIEU&code_challenge_method=S256&nonce=019ee938-2a1b-7465-9093-046ae24382c8&state=eyJpZCI6IjAxOWVlOTM4LTJhMWItN2M5Ni1iMGFkLTBhOWFmMjUxZmI0ZSIsIm1ldGEiOnsiaW50ZXJhY3Rpb25UeXBlIjoicmVkaXJlY3QifX0%3D&region=nyupstate&customer_type=home
+  [re-auth] saved storage_state to /Users/dbochman/repos/financial-dashboard/.nationalgrid_session/storage_state.json
+[2026-06-21 04:07:19] END National Grid electric re-auth rc=0
+[2026-06-21 04:07:19] START National Grid electric retry original: ./venv/bin/python3 scrape_national_grid_electric.py --headless --merge
+National Grid Electric Scraper (Cabin — Phillipston)
+========================================
+  Using saved storage state: /Users/dbochman/repos/financial-dashboard/.nationalgrid_session/storage_state.json
+  Authenticated successfully.
+
+[1/2] Extracting bill list from Bill History page...
+  Found 10 bills on Bill History page
+  Found 9 'View Bill' PDF links
+
+[2/2] Skipping bill details (use --with-details to extract kWh + breakdown)
+  Merged with existing data (/Users/dbochman/repos/financial-dashboard/electric_cabin_data.json)
+
+  Total readings: 10
+    2025-09: 193.0 kWh, $0.00
+    2025-10: 51.0 kWh, $0.00
+    2025-11: 103.0 kWh, $0.00
+    2025-12: 261.0 kWh, $88.82
+    2026-01: 432.0 kWh, $166.06
+    2026-02: 321.0 kWh, $113.83
+    2026-03: 279.0 kWh, $84.26
+    2026-04: 127.0 kWh, $0.00
+    2026-05: ? kWh, $0.00
+    2026-06: ? kWh, $0.00
+
+  Wrote 10 readings to /Users/dbochman/repos/financial-dashboard/electric_cabin_data.json
+  Next: python update_data.py import-json-electric-cabin
+[2026-06-21 04:07:26] END National Grid electric retry original rc=0
+[2026-06-21 04:07:26] START National Grid gas original: ./venv/bin/python3 scrape_national_grid.py --headless --merge
+National Grid MyAccount Scraper
+========================================
+  Using saved storage state: /Users/dbochman/repos/financial-dashboard/.nationalgrid_session/storage_state.json
+  Authenticated successfully.
+
+[1/2] Extracting bill list from Bill History page...
+  Found 24 bills on Bill History page
+  Found 23 'View Bill' PDF links
+
+[2/2] Skipping bill details (use --with-details to extract therms + breakdown)
+  Merged with existing data (/Users/dbochman/repos/financial-dashboard/gas_data.json)
+
+  Total readings: 23
+    2024-07: ? therms, $71.00
+    2024-08: ? therms, $115.00
+    2024-09: ? therms, $115.00
+    2024-10: ? therms, $115.00
+    2024-11: ? therms, $115.00
+    2024-12: ? therms, $115.00
+    2025-01: ? therms, $183.00
+    2025-02: ? therms, $183.00
+    2025-03: ? therms, $183.00
+    2025-04: ? therms, $183.00
+    2025-05: ? therms, $183.00
+    2025-06: ? therms, $183.00
+    2025-07: ? therms, $247.00
+    2025-08: ? therms, $247.00
+    2025-09: ? therms, $247.00
+    2025-10: ? therms, $247.00
+    2025-11: ? therms, $247.00
+    2025-12: ? therms, $247.00
+    2026-01: ? therms, $320.00
+    2026-02: ? therms, $320.00
+    2026-03: ? therms, $320.00
+    2026-04: ? therms, $320.00
+    2026-05: ? therms, $320.00
+
+  Wrote 23 readings to /Users/dbochman/repos/financial-dashboard/gas_data.json
+  Next: python update_data.py import-json-gas
+[2026-06-21 04:07:34] END National Grid gas original rc=0
+[2026-06-21 04:07:34] START BWSC original: ./venv/bin/python3 scrape_bwsc.py --headless --merge
+BWSC Customer Portal Scraper
+========================================
+  Using saved storage state: /Users/dbochman/repos/financial-dashboard/.bwsc_session/storage_state.json
+  Not logged in — please log in via the browser window.
+ERROR: Session expired and running in headless mode.
+Fix: Run once without --headless to log in interactively,
+then re-run with --headless.
+[2026-06-21 04:07:39] END BWSC original rc=1
+[2026-06-21 04:07:39] BWSC original failed; attempting Tier 2 --re-auth once
+[2026-06-21 04:07:41] START BWSC re-auth: ./venv/bin/python3 scrape_bwsc.py --re-auth --headless
+BWSC re-auth — session dir: /Users/dbochman/repos/financial-dashboard/.bwsc_session
+  storage_state target: /Users/dbochman/repos/financial-dashboard/.bwsc_session/storage_state.json
+========================================
+  [re-auth] navigating to https://customerportal.bwsc.org/account/ACCP000247253/1651398
+  [re-auth] post-navigate URL: https://umaxcustomerportalprod.b2clogin.com/umaxcustomerportalprod.onmicrosoft.com/b2c_1a_bwscprod_signup_signin_mfa/oauth2/v2.0/authorize?domain_hint=local&client_id=ed0fea92-2e3d-4013-a31e-4c18f96c6e87&redirect_uri=https%3A%2F%2Fcustomerportal.bwsc.org%2Fsignin-oidc&response_type=code%20id_token&scope=openid%20profile%20offline_access%20https%3A%2F%2Ffabrikamb2c.onmicrosoft.com%2Fdemoapi%2Fdemo.read&response_mode=form_post&nonce=639176260630753464.ZTQ2NjliNGYtY2QyMS00YjA3LTg3MmYtY2JlNDhiNGVjNzU5MmU1MDIxOWQtY2YyOS00MjllLTgzOTEtMWQwNTBmOTQ3YjJk&state=CfDJ8F4mdkoGa9VDvAaS-lmbUH_KFf36wA7tRCEz9ERwfac0LehjGx-AiL5VU3IvkyCgpL0hiso2KQ_jvam2H4FobnhKm6HW8z4sB8DDaWBaT1k5oK2y1VYMsh8F5qzsbRXhQ0iQ8Zvwmz_14f-xw6R4ks29CkWoveqdjayHxa07kMwGc7J0F-NxWcovC6X4_azwlfhz7ZTnnqPgTg0l4bldnvchxnERavC-PwvH8WCXLLzFf3fyZ1cugHm4TTznnf0p2M_yVSQsSyGkXxSQZTpp-ssXx-vxeh8aTog7o4Ay5IDp487qcdwz3ZkTHox6NMHg7KlUxafYLcJbNBJ3oVuEcYA&x-client-SKU=ID_NET8_0&x-client-ver=8.7.0.0
+  [re-auth] filled username (matched 1 via '#signInName, input[type="email"]')
+  [re-auth] filled password (matched 1 via '#password, input[type="password"]')
+  [re-auth] pressed Enter on password field
+  [re-auth] poll start, URL: https://umaxcustomerportalprod.b2clogin.com/umaxcustomerportalprod.onmicrosoft.com/b2c_1a_bwscprod_signup_signin_mfa/oauth2/v2.0/authorize?domain_hint=local&client_id=ed0fea92-2e3d-4013-a31e-4c18f96c6e87&redirect_uri=https%3A%2F%2Fcustomerportal.bwsc.org%2Fsignin-oidc&response_type=code%20id_token&scope=openid%20profile%20offline_access%20https%3A%2F%2Ffabrikamb2c.onmicrosoft.com%2Fdemoapi%2Fdemo.read&response_mode=form_post&nonce=639176260630753464.ZTQ2NjliNGYtY2QyMS00YjA3LTg3MmYtY2JlNDhiNGVjNzU5MmU1MDIxOWQtY2YyOS00MjllLTgzOTEtMWQwNTBmOTQ3YjJk&state=CfDJ8F4mdkoGa9VDvAaS-lmbUH_KFf36wA7tRCEz9ERwfac0LehjGx-AiL5VU3IvkyCgpL0hiso2KQ_jvam2H4FobnhKm6HW8z4sB8DDaWBaT1k5oK2y1VYMsh8F5qzsbRXhQ0iQ8Zvwmz_14f-xw6R4ks29CkWoveqdjayHxa07kMwGc7J0F-NxWcovC6X4_azwlfhz7ZTnnqPgTg0l4bldnvchxnERavC-PwvH8WCXLLzFf3fyZ1cugHm4TTznnf0p2M_yVSQsSyGkXxSQZTpp-ssXx-vxeh8aTog7o4Ay5IDp487qcdwz3ZkTHox6NMHg7KlUxafYLcJbNBJ3oVuEcYA&x-client-SKU=ID_NET8_0&x-client-ver=8.7.0.0
+  [re-auth] URL -> https://umaxcustomerportalprod.b2clogin.com/umaxcustomerportalprod.onmicrosoft.com/B2C_1A_BWSCPROD_SIGNUP_SIGNIN_MFA/api/CombinedSigninAndSignup/confirmed?rememberMe=false&csrf_token=c3JlQnZmSW03VWpaZWRPbS9rbWFFSWlxdGsyQ1l4QzB1eEVpTDNGWVI1V3A3bnVaMW1qSUVMSjFxYm05MnU4Mzl5UkRhM0NwazlZbWUvWkY1QlNrVGc9PTsyMDI2LTA2LTIxVDA4OjA3OjQzLjQyOTQyNTdaO290bEhmU2pCY3RGUllWL3FaSG9RT1E9PTt7Ik9yY2hlc3RyYXRpb25TdGVwIjoxfQ==&tx=StateProperties=eyJUSUQiOiI3MmU4MzQ1MC1mM2E2LTQxMzctYmM4Ni05ZDkwOTI0NzBiYjkifQ&p=B2C_1A_BWSCPROD_SIGNUP_SIGNIN_MFA&diags=%7B%22pageViewId%22%3A%2244d98c2f-aee3-47b3-8ebc-f84212022aca%22%2C%22pageId%22%3A%22CombinedSigninAndSignup%22%2C%22trace%22%3A%5B%7B%22ac%22%3A%22T005%22%2C%22acST%22%3A1782029263%2C%22acD%22%3A1%7D%2C%7B%22ac%22%3A%22T021%20-%20URL%3Ahttps%3A%2F%2Fcustomerportal.bwsc.org%2Flogin.html%22%2C%22acST%22%3A1782029263%2C%22acD%22%3A3%7D%2C%7B%22ac%22%3A%22T019%22%2C%22acST%22%3A1782029263%2C%22acD%22%3A5%7D%2C%7B%22ac%22%3A%22T004%22%2C%22acST%22%3A1782029263%2C%22acD%22%3A2%7D%2C%7B%22ac%22%3A%22T003%22%2C%22acST%22%3A1782029263%2C%22acD%22%3A1%7D%2C%7B%22ac%22%3A%22T035%22%2C%22acST%22%3A1782029263%2C%22acD%22%3A0%7D%2C%7B%22ac%22%3A%22T030Online%22%2C%22acST%22%3A1782029263%2C%22acD%22%3A0%7D%2C%7B%22ac%22%3A%22T002%22%2C%22acST%22%3A1782029267%2C%22acD%22%3A0%7D%2C%7B%22ac%22%3A%22T018T010%22%2C%22acST%22%3A1782029266%2C%22acD%22%3A770%7D%5D%7D
+  [re-auth] URL -> https://customerportal.bwsc.org/home
+  [re-auth] authenticated, URL: https://customerportal.bwsc.org/account/ACCP000247253/1651398
+  [re-auth] saved storage_state to /Users/dbochman/repos/financial-dashboard/.bwsc_session/storage_state.json
+[2026-06-21 04:07:54] END BWSC re-auth rc=0
+[2026-06-21 04:07:54] START BWSC retry original: ./venv/bin/python3 scrape_bwsc.py --headless --merge
+BWSC Customer Portal Scraper
+========================================
+  Using saved storage state: /Users/dbochman/repos/financial-dashboard/.bwsc_session/storage_state.json
+  Authenticated successfully.
+
+[1/4] Getting API credentials...
+  Fetching CSS API auth token...
+  Got CSS API JWT (898 chars)
+
+[2/4] Discovering services...
+  Fetching services...
+    Water Service (SRV043985)
+    Sewer Service (SRV192180)
+    Stormwater Service (SRV168436)
+
+[3/4] Fetching usage data...
+  Fetching billed usage for Water...
+    Got 12 readings (total: $247.36)
+  Fetching billed usage for Sewer...
+    Got 12 readings (total: $238.57)
+
+[4/4] Fetching bill totals...
+  Fetching bill totals...
+    Got 24 bills
+
+  API results: 12 water, 12 sewer, 24 bills
+  Merged with existing data (/Users/dbochman/repos/financial-dashboard/water_data.json)
+
+  Total readings: 24
+    2024-06: 315 CF, $51.00
+    2024-07: 355 CF, $56.83
+    2024-08: 350 CF, $56.18
+    2024-09: 315 CF, $51.65
+    2024-10: 270 CF, $45.19
+    2024-11: 285 CF, $47.13
+    2024-12: 290 CF, $47.77
+    2025-01: 430 CF, $66.94
+    2025-02: 270 CF, $45.28
+    2025-03: 310 CF, $50.66
+    2025-04: 340 CF, $54.69
+    2025-05: 345 CF, $55.37
+    2025-06: 280 CF, $46.62
+    2025-07: 395 CF, $62.09
+    2025-08: 335 CF, $54.02
+    2025-09: 365 CF, $58.05
+    2025-10: 350 CF, $56.04
+    2025-11: 290 CF, $47.97
+    2025-12: 310 CF, $50.66
+    2026-01: 250 CF, $42.79
+    2026-02: 295 CF, $49.44
+    2026-03: 260 CF, $44.65
+    2026-04: 240 CF, $41.91
+    2026-05: 225 CF, $39.85
+
+  Wrote 24 readings to /Users/dbochman/repos/financial-dashboard/water_data.json
+  Next: python update_data.py import-json-water
+[2026-06-21 04:08:08] END BWSC retry original rc=0
+[2026-06-21 04:08:08] START PennyMac mortgage original: ./venv/bin/python3 scrape_mortgage.py --lender pennymac --headless --merge
+Mortgage Scraper — PennyMac
+  Property: 95 Schoolhouse Rd, Phillipston MA
+==================================================
+  Using saved storage state: /Users/dbochman/repos/financial-dashboard/.pennymac_session/storage_state.json
+
+  Navigating to PennyMac portal...
+  Authenticated successfully.
+
+  Extracting PennyMac auth tokens...
+  Intercepting bearer token from page API calls...
+  Could not obtain PennyMac bearer token.
+  Current URL: https://mypennymac.pennymac.com/maintenance.html
+  The identity server may require interactive login.
+  Try running without --headless or use --chrome-profile.
+[2026-06-21 04:08:18] END PennyMac mortgage original rc=1
+[2026-06-21 04:08:18] PennyMac mortgage original failed; attempting Tier 2 --re-auth once
+[2026-06-21 04:08:19] START PennyMac mortgage re-auth: ./venv/bin/python3 scrape_mortgage.py --re-auth --headless
+usage: scrape_mortgage.py [-h] --lender {boa,pennymac} [--dry-run] [--merge]
+                          [--cookies] [--chrome-profile] [--headless]
+                          [--re-auth] [--boa-re-auth] [--keep-alive]
+                          [--verify-auth] [--browser-heartbeat] [--explore]
+scrape_mortgage.py: error: the following arguments are required: --lender
+[2026-06-21 04:08:20] END PennyMac mortgage re-auth rc=2
+[2026-06-21 04:08:20] START BOA mortgage original: ./venv/bin/python3 scrape_mortgage.py --lender boa --headless --merge
+Mortgage Scraper — Bank of America
+  Property: 19 Crosstown Ave, West Roxbury MA
+==================================================
+  [boa] Trying cookie-replay path (cookies captured 2026-06-18 23:45:06 EDT)...
+  Calling BOA activity API...
+  ✗ Cookie replay failed: BoA replay returned HTTP 200 ct='text/html' (cookies likely expired)
+  Falling back to live CDP attach...
+
+  Connecting via raw CDP to http://127.0.0.1:9869 (Playwright connect_over_cdp bypass)
+Traceback (most recent call last):
+  File "/Users/dbochman/repos/financial-dashboard/scrape_mortgage.py", line 1805, in <module>
+    main()
+    ~~~~^^
+  File "/Users/dbochman/repos/financial-dashboard/scrape_mortgage.py", line 1643, in main
+    raw_cdp_page = _attach_to_pinchtab_tab(cdp_url, config["cookie_domain"])
+  File "/Users/dbochman/repos/financial-dashboard/scrape_mortgage.py", line 91, in _attach_to_pinchtab_tab
+    raise RuntimeError(
+    ...<2 lines>...
+    )
+RuntimeError: No CDP target with url containing 'bankofamerica.com' found. Open the Pinchtab Chrome tab to the lender portal first.
+[2026-06-21 04:08:21] END BOA mortgage original rc=1
+[2026-06-21 04:08:21] BOA mortgage original failed; running guarded verify-auth
+[2026-06-21 04:08:21] boa-tab-verify: cdp_unavailable
+[2026-06-21 04:08:21] BOA mortgage verify-auth rc=1
+[2026-06-21 04:08:21] Starting imports
+[2026-06-21 04:08:21] START import-json-utilities: ./venv/bin/python3 update_data.py import-json-utilities
+Imported: 1 utility accounts, 24 readings
+Run 'python serve_dashboard.py' to view your utilities dashboard at /utilities
+[2026-06-21 04:08:21] END import-json-utilities rc=0
+[2026-06-21 04:08:21] START import-json-gas: ./venv/bin/python3 update_data.py import-json-gas
+Imported: 1 gas utility accounts, 23 readings
+Run 'python serve_dashboard.py' to view your gas dashboard at /gas
+[2026-06-21 04:08:21] END import-json-gas rc=0
+[2026-06-21 04:08:21] START import-json-electric-cabin: ./venv/bin/python3 update_data.py import-json-electric-cabin
+Imported: 1 electric utility accounts, 10 readings
+Run 'python serve_dashboard.py' to view your utilities dashboard at /utilities
+[2026-06-21 04:08:22] END import-json-electric-cabin rc=0
+[2026-06-21 04:08:22] START import-json-solar-cabin: ./venv/bin/python3 update_data.py import-json-solar-cabin
+Imported: 1 solar utility accounts, 6 readings
+Run 'python serve_dashboard.py' to view your utilities dashboard at /utilities
+[2026-06-21 04:08:22] END import-json-solar-cabin rc=0
+[2026-06-21 04:08:22] START import-json-water: ./venv/bin/python3 update_data.py import-json-water
+Imported: 1 water utility accounts, 24 readings
+Run 'python serve_dashboard.py' to view your water dashboard at /water
+[2026-06-21 04:08:22] END import-json-water rc=0
+[2026-06-21 04:08:22] START import-json-boa-mortgage: ./venv/bin/python3 update_data.py import-json-boa-mortgage
+  Redfin estimate for 19 Crosstown Ave, West Roxbury MA: $1,060,882
+Imported: 1 mortgage accounts, 12 payments
+Run 'python serve_dashboard.py' to view your mortgage dashboard at /mortgage
+[2026-06-21 04:08:23] END import-json-boa-mortgage rc=0
+[2026-06-21 04:08:23] START import-json-pennymac-mortgage: ./venv/bin/python3 update_data.py import-json-pennymac-mortgage
+  Redfin estimate for 95 Schoolhouse Rd, Phillipston MA: $406,429
+Imported: 1 mortgage accounts, 10 payments
+Run 'python serve_dashboard.py' to view your mortgage dashboard at /mortgage
+[2026-06-21 04:08:24] END import-json-pennymac-mortgage rc=0
+[2026-06-21 04:08:24] Skipping Plaid sync: .env missing PLAID_CLIENT_ID
+[2026-06-21 04:08:24] Financial scrape finished with 2 scraper failure(s). Summary: /Users/dbochman/.openclaw/workspace/tmp/financial-scrape-summary-20260621-040620.txt

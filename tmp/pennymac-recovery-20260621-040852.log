@@ -1,0 +1,11 @@
+[2026-06-21 04:08:52] START PennyMac corrected re-auth
+PennyMac re-auth — session dir: /Users/dbochman/repos/financial-dashboard/.pennymac_session
+  storage_state target: /Users/dbochman/repos/financial-dashboard/.pennymac_session/storage_state.json
+========================================
+  [re-auth] navigating to https://mypennymac.pennymac.com/
+  [re-auth] post-navigate URL: https://mypennymac.pennymac.com/maintenance.html
+  [re-auth] username selector '#username' matched 0 elements
+  [re-auth] password selector '#password' matched 0 elements
+  [re-auth] no username/password field found on initial page
+[2026-06-21 04:08:58] END PennyMac corrected re-auth rc=1
+log=/Users/dbochman/.openclaw/workspace/tmp/pennymac-recovery-20260621-040852.log
