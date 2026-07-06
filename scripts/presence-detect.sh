@@ -8,7 +8,6 @@
 #   presence-detect.sh crosstown   # Scan Crosstown LAN (run on MacBook Pro)
 #   presence-detect.sh potato      # Scan Potato GPS only (run on Mac Mini)
 #   presence-detect.sh evaluate    # Correlate all signals (run on Mac Mini)
-#   presence-detect.sh observe cabin|crosstown  # Read-only network observation
 #
 # Cabin (Philly):   Starlink gRPC API via grpcurl (Mac Mini, local)
 # Crosstown (Boston): ARP scan (MacBook Pro, local)
@@ -24,10 +23,6 @@
 
 set -euo pipefail
 
-REQUESTED_MODE="${1:-}"
-READ_ONLY_OBSERVATION=0
-[ "$REQUESTED_MODE" = "observe" ] && READ_ONLY_OBSERVATION=1
-
 LOG_FILE="$HOME/.openclaw/logs/presence-detect.log"
 if [ -x "/opt/homebrew/opt/node@22/bin/node" ]; then
   NODE="/opt/homebrew/opt/node@22/bin/node"
@@ -36,18 +31,14 @@ elif [ -x "/opt/homebrew/bin/node" ]; then
 else
   NODE="$(command -v node || echo /opt/homebrew/bin/node)"
 fi
-GRPCURL="${PRESENCE_GRPCURL_BIN:-/opt/homebrew/bin/grpcurl}"
-PING="${PRESENCE_PING_BIN:-/sbin/ping}"
-ARP="${PRESENCE_ARP_BIN:-/usr/sbin/arp}"
-if [ -n "${PRESENCE_TAILSCALE_BIN:-}" ]; then
-  TAILSCALE="$PRESENCE_TAILSCALE_BIN"
-else
-  TAILSCALE="/usr/local/bin/tailscale"
-  [ -x "$TAILSCALE" ] || TAILSCALE="/Applications/Tailscale.app/Contents/MacOS/Tailscale"
-fi
+GRPCURL="/opt/homebrew/bin/grpcurl"
+TAILSCALE="/usr/local/bin/tailscale"
+[ -x "$TAILSCALE" ] || TAILSCALE="/Applications/Tailscale.app/Contents/MacOS/Tailscale"
 STATE_DIR="${HOME}/.openclaw/presence"
 EVALUATE_LOCK_FILE="${STATE_DIR}/evaluate.lock"
 EVALUATE_LOCK_TIMEOUT_SECONDS=10
+
+mkdir -p "$STATE_DIR" "$(dirname "$LOG_FILE")"
 
 rotate_log_if_needed() {
   local max_bytes=${PRESENCE_LOG_MAX_BYTES:-$((100 * 1024 * 1024))}
@@ -61,6 +52,7 @@ rotate_log_if_needed() {
   lock="${LOG_FILE}.rotate.lock"
   mkdir "$lock" 2>/dev/null || return 0
 
+  # Recheck after acquiring the lock because cabin and receive paths share it.
   size=$(stat -f%z "$LOG_FILE" 2>/dev/null || echo 0)
   if [ "$size" -gt "$max_bytes" ]; then
     i=$keep
@@ -76,24 +68,20 @@ rotate_log_if_needed() {
   rmdir "$lock" 2>/dev/null || true
 }
 
-if [ "$READ_ONLY_OBSERVATION" -eq 0 ]; then
-  mkdir -p "$STATE_DIR" "$(dirname "$LOG_FILE")"
-  rotate_log_if_needed
-fi
+rotate_log_if_needed
 
 log() {
-  if [ "$READ_ONLY_OBSERVATION" -eq 1 ]; then
-    echo "[$(date '+%Y-%m-%d %H:%M:%S')] $*" >&2
-  else
-    echo "[$(date '+%Y-%m-%d %H:%M:%S')] $*" >> "$LOG_FILE"
-  fi
+  echo "[$(date '+%Y-%m-%d %H:%M:%S')] $*" >> "$LOG_FILE"
 }
 
 # ── Known devices ────────────────────────────────────────────────────────────
 
+# Tracked people per location — vacancy requires all tracked people for THAT
+# location to be absent AND confirmed at the other location.
 CABIN_TRACKED='["Dylan","Julia"]'
 CROSSTOWN_TRACKED='["Dylan","Julia"]'
 
+# Cabin (Philly) — matched by device name from Starlink gRPC API
 CABIN_DEVICES='[
   {"person":"Dylan","match":"name","pattern":"Dylan","require":"iPhone"},
   {"person":"Dylan","match":"name","pattern":"Dylan","require":"phone"},
@@ -101,52 +89,13 @@ CABIN_DEVICES='[
   {"person":"Julia","match":"name_fallback","pattern":"iPhone","excludeNames":["Dylan"]},
 ]'
 
-# Crosstown MAC identities are machine-local private configuration on the MBP.
-CROSSTOWN_DEVICE_CONFIG="${PRESENCE_CROSSTOWN_DEVICE_CONFIG:-$HOME/.openclaw/presence-devices.env}"
-CROSSTOWN_DEVICES=""
-
-load_crosstown_devices() {
-  if [[ -z "${CROSSTOWN_DYLAN_MAC:-}" || -z "${CROSSTOWN_JULIA_MAC:-}" ]]; then
-    if [[ ! -e "$CROSSTOWN_DEVICE_CONFIG" && ! -L "$CROSSTOWN_DEVICE_CONFIG" ]]; then
-      log "WARN: Crosstown device config is not provisioned; using exact hostname-only matching"
-      CROSSTOWN_DEVICES='[
-  {"person":"Dylan","match":"hostname","pattern":"dylans-iphone"},
+# Crosstown (Boston) — matched by MAC address via ARP scan
+CROSSTOWN_DEVICES='[
+  {"person":"Dylan","match":"mac","pattern":"6c:3a:ff:5f:fc:ba"},
+  {"person":"Julia","match":"mac","pattern":"38:e1:3d:c0:40:63"},
+  {"person":"Julia","match":"ip","pattern":"192.168.165.248"},
   {"person":"Julia","match":"hostname","pattern":"julias-iphone"}
 ]'
-      return 0
-    fi
-    if [[ ! -f "$CROSSTOWN_DEVICE_CONFIG" || -L "$CROSSTOWN_DEVICE_CONFIG" ]]; then
-      log "ERROR: Crosstown device config must be a regular non-symlink file"
-      return 1
-    fi
-    local owner mode
-    read -r owner mode < <(stat -f '%u %Lp' "$CROSSTOWN_DEVICE_CONFIG")
-    if [[ "$owner" != "$(id -u)" || "$mode" != "600" ]]; then
-      log "ERROR: Crosstown device config must be owned by the current user with mode 0600"
-      return 1
-    fi
-    set -a
-    if ! . "$CROSSTOWN_DEVICE_CONFIG" >/dev/null 2>&1; then
-      set +a
-      log "ERROR: Crosstown device config could not be loaded"
-      return 1
-    fi
-    set +a
-  fi
-
-  local mac_pattern='^([[:xdigit:]]{2}:){5}[[:xdigit:]]{2}$'
-  if [[ ! "${CROSSTOWN_DYLAN_MAC:-}" =~ $mac_pattern ||
-        ! "${CROSSTOWN_JULIA_MAC:-}" =~ $mac_pattern ]]; then
-    log "ERROR: Crosstown device config contains an invalid MAC address"
-    return 1
-  fi
-
-  CROSSTOWN_DEVICES=$(printf '%s' "[
-  {\"person\":\"Dylan\",\"match\":\"mac\",\"pattern\":\"$CROSSTOWN_DYLAN_MAC\"},
-  {\"person\":\"Julia\",\"match\":\"mac\",\"pattern\":\"$CROSSTOWN_JULIA_MAC\"},
-  {\"person\":\"Julia\",\"match\":\"hostname\",\"pattern\":\"julias-iphone\"}
-]")
-}
 
 # ── Cabin: Starlink gRPC API ────────────────────────────────────────────────
 
@@ -224,147 +173,59 @@ console.log(JSON.stringify({
 # ── Crosstown: ARP scan ─────────────────────────────────────────────────────
 
 scan_crosstown() {
-  if ! load_crosstown_devices; then
-    echo '{"error":"crosstown_device_config_unavailable","location":"crosstown"}'
-    return 1
-  fi
-  # Step 1: Probe the subnet. iPhones may ignore ICMP while still answering
-  # link-layer resolution, so ping success is not used as the presence signal.
-  local gateway_ip="192.168.165.1"
+  # Step 1: Subnet sweep to populate ARP table
   local known_ips="192.168.165.124 192.168.165.248"
-  local probe_ips="$gateway_ip $known_ips"
-  local sweep_hosts
-  if [ "${PRESENCE_CROSSTOWN_SWEEP_HOSTS+x}" = "x" ]; then
-    # Test seam: an explicitly empty value disables only the broad sweep.
-    sweep_hosts="$PRESENCE_CROSSTOWN_SWEEP_HOSTS"
-  else
-    sweep_hosts=$(/usr/bin/seq 1 254)
-  fi
-  for ip in $probe_ips; do
-    "$PING" -c3 -W2 "$ip" >/dev/null 2>&1 &
+  for ip in $known_ips; do
+    ping -c3 -W2 "$ip" >/dev/null 2>&1 &
   done
-  for i in $sweep_hosts; do
-    "$PING" -c1 -W1 "192.168.165.$i" >/dev/null 2>&1 &
-  done
+  for i in $(seq 1 254); do ping -c1 -W1 "192.168.165.$i" >/dev/null 2>&1 & done
   wait
 
-  # Step 2: Re-probe tracked IPs, then require fresh inbound link-layer
-  # reachability from `arp -anl`. Plain `arp -a` retains complete entries after
-  # a device leaves, and deleting those entries requires root on macOS.
+  # Step 2: Delete ARP entries for tracked IPs to clear stale cache,
+  # then re-ping to see if they come back. Devices on the network will
+  # re-populate the ARP entry even if sleeping (ARP is layer 2, not ICMP).
+  for ip in $known_ips; do
+    arp -d "$ip" >/dev/null 2>&1 || true
+  done
+  # Brief pause + re-ping to trigger fresh ARP resolution
   sleep 1
-  for ip in $probe_ips; do
-    "$PING" -c2 -W3 "$ip" >/dev/null 2>&1 &
+  for ip in $known_ips; do
+    ping -c2 -W3 "$ip" >/dev/null 2>&1 &
   done
   wait
 
-  local arp_all reachability_all
-  if ! arp_all=$("$ARP" -a 2>/dev/null); then
-    log "WARN: ARP hostname query failed; continuing with numeric reachability"
-    arp_all=""
-  fi
-  if ! reachability_all=$("$ARP" -anl 2>/dev/null); then
-    log "ERROR: Extended ARP reachability query failed"
-    echo '{"error":"arp_reachability_failed","location":"crosstown"}'
-    return 1
-  fi
-  if [ -z "$reachability_all" ]; then
-    log "ERROR: Extended ARP reachability query returned no output"
+  local arp_output
+  arp_output=$(arp -a | grep '192.168.165' 2>/dev/null || echo "")
+
+  if [ -z "$arp_output" ]; then
+    log "ERROR: ARP scan returned no results"
     echo '{"error":"arp_scan_failed","location":"crosstown"}'
     return 1
   fi
 
-  local parsed
-  if ! parsed=$($NODE -e "
+  $NODE -e "
 const devices = $CROSSTOWN_DEVICES;
 const arpLines = process.argv[1].split('\n').filter(Boolean);
-const rawReachabilityLines = process.argv[2].split('\n').map(line => line.trim()).filter(Boolean);
 const results = {};
 
-function fail(message) {
-  console.error(message);
-  process.exit(2);
-}
-
-function normalizeMac(value) {
-  const parts = String(value || '').toLowerCase().split(':');
-  if (parts.length !== 6 || parts.some(part => !/^[0-9a-f]{1,2}$/.test(part))) return null;
-  return parts.map(part => Number.parseInt(part, 16).toString(16).padStart(2, '0')).join(':');
-}
-
-function inboundExpiryIsLive(value) {
-  // macOS arp -anl renders live durations as combinations such as 52s,
-  // 2m21s, or 1h3m. Unknown/expired/static entries must not prove presence.
-  if (value === 'expired' || value === '(none)') return false;
-  if (!/^[1-9][0-9dhms]{1,8}$/.test(value || '')) fail('unexpected inbound reachability value');
-  return true;
-}
-
-const header = rawReachabilityLines.shift() || '';
-if (!/^Neighbor\s+Linklayer Address\s+Expire\(O\)\s+Expire\(I\)\s+Netif(?:\s+Refs\s+Prbs)?$/.test(header)) {
-  fail('unexpected arp -anl header');
-}
-
-const liveRows = [];
-const liveKeys = new Map();
-for (const line of rawReachabilityLines) {
-  const columns = line.trim().split(/\s+/);
-  if (columns.length < 5) continue;
-  const [ip, rawMac, , inboundExpiry, iface] = columns;
-  if (!/^192\.168\.165\.[0-9]+$/.test(ip)) continue;
-  if (rawMac === '(incomplete)') continue;
-  const mac = normalizeMac(rawMac);
-  if (!mac) fail('malformed in-subnet link-layer address');
-  if (!inboundExpiryIsLive(inboundExpiry)) continue;
-  const key = ip + '|' + iface;
-  const previous = liveKeys.get(key);
-  if (previous && previous !== mac) fail('conflicting live link-layer rows');
-  if (!previous) {
-    liveKeys.set(key, mac);
-    liveRows.push({ ip, mac, iface });
-  }
-}
-
-const gatewayRows = liveRows.filter(row => row.ip === '192.168.165.1');
-if (gatewayRows.length !== 1) fail('gateway lacks unambiguous fresh inbound reachability');
-const activeInterface = gatewayRows[0].iface;
-const activeRows = liveRows.filter(row => row.iface === activeInterface);
-
-function neighborKey(ip, mac, iface) {
-  return ip + '|' + mac + '|' + iface;
-}
-
-const namesByNeighbor = new Map();
-for (const line of arpLines) {
-  const match = line.match(/^(\S+)\s+\(([0-9.]+)\)\s+at\s+([0-9a-f:]+|\(incomplete\))\s+on\s+(\S+)/i);
-  if (!match) continue;
-  const [, rawName, ip, rawMac, iface] = match;
-  const mac = normalizeMac(rawMac);
-  if (!mac) continue;
-  const live = activeRows.some(row => row.ip === ip && row.mac === mac && row.iface === iface);
-  if (!live) continue;
-  const name = rawName.toLowerCase().replace(/\.$/, '');
-  if (name !== '?') namesByNeighbor.set(neighborKey(ip, mac, iface), name);
-}
-
-function hostnameMatches(name, pattern) {
-  if (!name) return false;
-  const expected = pattern.toLowerCase().replace(/\.$/, '');
-  return name === expected || name.split('.')[0] === expected;
-}
-
 for (const dev of devices) {
-  for (const row of activeRows) {
-    const name = namesByNeighbor.get(neighborKey(row.ip, row.mac, row.iface));
+  for (const line of arpLines) {
+    const macMatch = line.match(/at\s+([0-9a-f:]+)/i);
+    const ipMatch = line.match(/\(([0-9.]+)\)/);
+    if (!macMatch || !ipMatch) continue;
+    // Skip incomplete ARP entries (device not on network)
+    if (line.includes('(incomplete)')) continue;
+    const mac = macMatch[1].toLowerCase();
+    const ip = ipMatch[1];
     let matched = false;
-    if (dev.match === 'mac') matched = row.mac === normalizeMac(dev.pattern);
-    else if (dev.match === 'name' || dev.match === 'hostname') matched = hostnameMatches(name, dev.pattern);
+    if (dev.match === 'mac') matched = mac === dev.pattern.toLowerCase();
+    else if (dev.match === 'ip') matched = ip === dev.pattern;
+    else if (dev.match === 'name' || dev.match === 'hostname') {
+      const nm = line.match(/^(\S+)/);
+      matched = nm && nm[1].toLowerCase().includes(dev.pattern.toLowerCase());
+    }
     if (matched) {
-      results[dev.person] = {
-        present: true,
-        ip: row.ip,
-        mac: row.mac,
-        device: dev.match === 'mac' ? 'phone (MAC match)' : name
-      };
+      results[dev.person] = { present: true, ip, mac, device: dev.match === 'mac' ? 'phone (MAC match)' : dev.match === 'ip' ? 'phone (IP match)' : line.match(/^(\S+)/)?.[1] || 'unknown' };
       break;
     }
   }
@@ -374,15 +235,10 @@ for (const dev of devices) {
 console.log(JSON.stringify({
   location: 'crosstown',
   timestamp: new Date().toISOString(),
-  totalDevices: activeRows.length,
+  totalDevices: arpLines.filter(l => !l.includes('(incomplete)')).length,
   presence: results
 }, null, 2));
-" "$arp_all" "$reachability_all" 2>/dev/null); then
-    log "ERROR: ARP reachability parsing failed"
-    echo '{"error":"parse_failed","location":"crosstown"}'
-    return 1
-  fi
-  printf '%s\n' "$parsed"
+" "$arp_output" 2>/dev/null || echo '{"error":"parse_failed","location":"crosstown"}'
 }
 
 # ── Potato: Fi collar GPS (runs on Mac Mini, queries cellular API) ──────────
@@ -418,62 +274,6 @@ console.log(JSON.stringify({
   longitude: data.longitude
 }, null, 2));
 " "$fi_response" 2>/dev/null || echo '{"error":"parse_failed","name":"Potato"}'
-}
-
-# Validate the strict stdout contract used by side-effect-free callers. This is
-# intentionally separate from scheduled scan modes so their behavior is
-# unchanged.
-validate_observation() {
-  local result="$1" expected_location="$2"
-  "$NODE" -e '
-let observation;
-try {
-  observation = JSON.parse(process.argv[1]);
-} catch {
-  process.exit(2);
-}
-if (!observation || typeof observation !== "object" || Array.isArray(observation)) process.exit(2);
-if (observation.error || observation.location !== process.argv[2]) process.exit(2);
-const timestamp = Date.parse(observation.timestamp);
-const ageMs = Date.now() - timestamp;
-if (!Number.isFinite(timestamp) || ageMs < -60000 || ageMs > 300000) process.exit(2);
-const presence = observation.presence;
-if (!presence || typeof presence !== "object" || Array.isArray(presence)
-    || Object.keys(presence).length === 0) process.exit(2);
-for (const [person, info] of Object.entries(presence)) {
-  if (!person || !info || typeof info !== "object" || Array.isArray(info)
-      || typeof info.present !== "boolean") process.exit(2);
-}
-console.log(JSON.stringify(observation, null, 2));
-' "$result" "$expected_location"
-}
-
-observe_network() {
-  local location="$1" result validated scan_status
-  case "$location" in
-    cabin)
-      if result=$(scan_cabin); then scan_status=0; else scan_status=$?; fi
-      ;;
-    crosstown)
-      if result=$(scan_crosstown); then scan_status=0; else scan_status=$?; fi
-      ;;
-    *)
-      echo '{"error":"unknown_observation_location"}'
-      return 2
-      ;;
-  esac
-
-  if [ "$scan_status" -ne 0 ]; then
-    log "ERROR: Read-only $location observation failed (status $scan_status)"
-    echo "{\"error\":\"observation_failed\",\"location\":\"$location\"}"
-    return "$scan_status"
-  fi
-  if ! validated=$(validate_observation "$result" "$location" 2>/dev/null); then
-    log "ERROR: Read-only $location observation returned malformed data"
-    echo "{\"error\":\"invalid_observation\",\"location\":\"$location\"}"
-    return 1
-  fi
-  printf '%s\n' "$validated"
 }
 
 # ── Evaluate: Correlate both locations (runs on Mac Mini) ────────────────────
@@ -713,13 +513,6 @@ fi
 log "Running: $LOCATION"
 
 case "$LOCATION" in
-  observe)
-    if [ "$#" -ne 2 ]; then
-      echo '{"error":"usage","message":"presence-detect.sh observe <cabin|crosstown>"}'
-      exit 2
-    fi
-    observe_network "$2"
-    ;;
   cabin)
     result=$(scan_cabin)
     echo "$result" > "${STATE_DIR}/cabin-scan.json"

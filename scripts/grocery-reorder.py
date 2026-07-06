@@ -25,6 +25,7 @@ import atexit
 # ============================================================
 # Configuration
 # ============================================================
+PINCHTAB = "/opt/homebrew/bin/pinchtab"
 PINCHTAB_INSTANCE_HELPER = os.path.expanduser("~/.openclaw/bin/pinchtab-headless-instance")
 GWS = "/opt/homebrew/bin/gws"
 JULIA_EMAIL = os.environ.get("STARMARKET_GMAIL", "")
@@ -44,7 +45,7 @@ PT_TAB_ID = ""
 def pt_eval(js):
     """Evaluate JavaScript in pinchtab browser."""
     r = subprocess.run(
-        [PINCHTAB_INSTANCE_HELPER, "eval", PT_INSTANCE_ID, PT_TAB_ID, js],
+        [PINCHTAB, "eval", js, "--tab", PT_TAB_ID, "--json"],
         capture_output=True,
         text=True,
     )
@@ -56,7 +57,7 @@ def pt_eval(js):
 def pt_nav(url):
     """Navigate pinchtab to a URL."""
     r = subprocess.run(
-        [PINCHTAB_INSTANCE_HELPER, "navigate", PT_INSTANCE_ID, PT_TAB_ID, url],
+        [PINCHTAB, "nav", url, "--tab", PT_TAB_ID, "--json"],
         capture_output=True,
         text=True,
     )
@@ -100,11 +101,7 @@ def stop_browser():
     global PT_INSTANCE_ID, PT_INSTANCE_STARTED, PT_TAB_ID
 
     if PT_TAB_ID:
-        subprocess.run(
-            [PINCHTAB_INSTANCE_HELPER, "close", PT_INSTANCE_ID, PT_TAB_ID],
-            capture_output=True,
-            text=True,
-        )
+        subprocess.run([PINCHTAB, "close", PT_TAB_ID], capture_output=True, text=True)
         PT_TAB_ID = ""
     if PT_INSTANCE_ID:
         subprocess.run(
