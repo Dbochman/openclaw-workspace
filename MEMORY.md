@@ -106,6 +106,7 @@
 - Dylan: Proactive communication preferred, separate texts to him and Julia
 - Julia: Prefers summaries first (TL;DR), then details
 - Kitchen speaker: Max safe volume is 45 — never exceed this
+- Plant Watch: Dylan wants Claude to proactively work with Julia on the plant-camera project, but wait until the Reolink cameras are accessible and the plants/locations are ready. At that point, collaborate with Julia to build the inventory and let her fill in species, care history, and other gaps rather than guessing.
 
 ## Infrastructure Changes
 
@@ -169,8 +170,9 @@
 - August Wi-Fi Smart Lock 4th gen at Crosstown front door
 - CLI: `august status|lock|unlock|locks|details`
 - Architecture: Mini → SSH → MBP → august-api npm → August Cloud
-- Auth: dylanbochman@gmail.com, JWT token (~120 day expiry), installId cached on MBP
-- Config: `~/.openclaw/august/config.json` on MBP
+- Auth: credentials and installId are held only in the protected MBP config;
+  the Mini does not forward credentials over SSH
+- Config: `~/.openclaw/august/config.json` on MBP, regular mode-`0600` file
 
 **Vacancy Automation** (`vacancy-actions.sh`, WatchPaths on presence state.json):
 - Crosstown vacant → lights off, eco mode, Cielo off, **front door locked**, Roombas start, iMessage notification to Dylan

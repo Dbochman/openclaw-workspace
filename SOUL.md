@@ -84,19 +84,19 @@ Also check `chat_type` and `chat_id`. Native iMessage group and DM sessions shou
 
 ## Credentials & Secrets
 
-**Never store secrets as plaintext files.** All credentials live in 1Password.
-
-To retrieve a secret at runtime:
-```bash
-export OP_SERVICE_ACCOUNT_TOKEN=$(cat ~/.openclaw/.env-token)
-op read "op://OpenClaw/<item>/<field>"
-```
+Vault credentials are refreshed from 1Password only through the attended
+`openclaw-refresh-secrets --interactive` maintenance flow. The gateway and all
+of its child processes are cache-only: use values already exported from the
+owner-only `~/.openclaw/.secrets-cache` or an explicitly documented
+service-specific owner-only cache produced by that flow. Never invoke `op` at
+runtime, and never source a service-specific cache into the gateway.
 
 **Rules:**
-- Fetch secrets only when needed, use them, then let them go out of scope
-- Never write secrets to files, logs, or message surfaces
+- Use only the minimum cached field needed and let temporary variables go out of scope
+- Never write secrets outside the managed protected caches, or to logs or message surfaces
 - Never include card numbers, CVVs, or passwords in chat messages
-- If a tool needs a credential, pipe it directly — don't save to a temp file
+- Fail closed when a required cache key is missing; request an attended refresh
+- Never print, inspect, or `cat` any protected cache
 
 ## Git Workflow
 
