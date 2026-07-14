@@ -172,28 +172,6 @@ restaurant-book run --job-id <canonical-job-id>
 ### Vacancy Automation
 When a house becomes `confirmed_vacant` (both people detected at the other location), the `vacancy-actions` LaunchAgent turns off lights, sets thermostat to eco, turns off Cielos (Crosstown only), locks the Crosstown front door, and starts all Roombas. Independently, each person's sticky detected location is made current on Eight Sleep and their side on the other Pod becomes away. iMessage notification is sent for lock status.
 
-## Nest Camera Media
-
-The `nest-camera` skill can privately deliver a fresh still or a short live
-H.264 MP4 from `Kitchen`, `Living Room`, or `Living Room Wired`. Requests must
-come explicitly from Dylan or Julia in a direct one-to-one conversation.
-
-```bash
-nest-camera-image capture 'Kitchen'
-nest-camera-image capture-video 'Kitchen' 5  # whole seconds, 1-30
-nest-camera-image cleanup '<opaque-token>'   # always after delivery/failure
-```
-
-- A video request records the live WebRTC stream when asked; it cannot retrieve
-  historical Nest Aware footage.
-- Use 10 seconds when someone asks for a short clip without a duration.
-- Send through the current source route without an explicit target, then clean
-  up in a `finally` step. Media is mode `0600`, validated before delivery, and
-  guarded by both immediate cleanup and a 15-minute crash-orphan reaper.
-- The lower-level exact-resource commands are `nest camera snap-config` and
-  `nest camera clip-config <alias> <seconds> <output_path>`. Agents should use
-  `nest-camera-image`, which owns safe staging, validation, and cleanup.
-
 ## Eight Sleep Pod
 
 CLI at `/opt/homebrew/bin/8sleep`. Controls Pod 3 (King) at Crosstown by
