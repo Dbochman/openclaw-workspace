@@ -20,6 +20,7 @@ STATE_FILE="$PRESENCE_DIR/state.json"
 MARKER_DIR="$PRESENCE_DIR/vacancy-dispatched"
 LOG_FILE="$HOME/.openclaw/logs/vacancy-actions.log"
 ROOMBA_SNOOZE_FILE="${ROOMBA_SNOOZE_FILE:-$HOME/.openclaw/dog-walk/snooze.json}"
+PRESENCE_SCANNER="${PRESENCE_SCANNER:-$HOME/.openclaw/workspace/scripts/presence-detect.sh}"
 
 # All CLIs resolved via PATH (~/.openclaw/bin + /opt/homebrew/bin)
 
@@ -100,6 +101,15 @@ PY
       return 0
       ;;
   esac
+}
+
+# Do not let an absent, invalid, or legacy Cabin binding semantically relocate
+# Julia's Eight Sleep side. Schema-v2 activation releases this containment
+# automatically only while the deployed scanner can validate the protected
+# exact production binding without writing presence state.
+cabin_presence_enrollment_active() {
+  [[ -x "$PRESENCE_SCANNER" ]] &&
+    "$PRESENCE_SCANNER" validate-config cabin >/dev/null 2>&1
 }
 
 mkdir -p "$MARKER_DIR"
@@ -282,4 +292,10 @@ reconcile_eightsleep_home() {
 }
 
 reconcile_eightsleep_home "Dylan" dylan "$dylan_location"
-reconcile_eightsleep_home "Julia" julia "$julia_location"
+
+julia_eightsleep_location="$julia_location"
+if [[ "$julia_location" == "cabin" ]] && ! cabin_presence_enrollment_active; then
+  julia_eightsleep_location="crosstown"
+  log "  WARN: Pinning Eight Sleep julia to crosstown until strict Cabin presence enrollment validates"
+fi
+reconcile_eightsleep_home "Julia" julia "$julia_eightsleep_location"

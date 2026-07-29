@@ -1,37 +1,120 @@
 #!/usr/bin/env python3
-import subprocess, json, sys, base64, re, html, email.utils
-ACCOUNT='julia.joy.jennings@gmail.com'
+import base64
+import concurrent.futures
+import json
+import os
+import subprocess
+import sys
 
-def gws(resource, method, params=None, body=None):
-    cmd=['gws','gmail']+resource.split()+[method]
-    if params is not None:
-        cmd += ['--params', json.dumps(params,separators=(',',':'))]
+ACCOUNT = "julia.joy.jennings@gmail.com"
+
+
+def gws(resource, method, params, body=None):
+    env = os.environ.copy()
+    env["GOOGLE_WORKSPACE_CLI_ACCOUNT"] = ACCOUNT
+    cmd = ["gws", "gmail", *resource.split(), method, "--params", json.dumps(params)]
     if body is not None:
-        cmd += ['--json', json.dumps(body,separators=(',',':'))]
-    cmd += ['--account', ACCOUNT]
-    p=subprocess.run(cmd,text=True,capture_output=True)
-    if p.returncode!=0:
-        raise RuntimeError(f"cmd failed {cmd}\nSTDOUT:{p.stdout}\nSTDERR:{p.stderr}")
-    return json.loads(p.stdout) if p.stdout.strip() else {}
+        cmd += ["--json", json.dumps(body)]
+    p = subprocess.run(cmd, env=env, text=True, capture_output=True)
+    if p.returncode:
+        raise RuntimeError((p.stderr or p.stdout).strip())
+    data = json.loads(p.stdout or "{}")
+    if isinstance(data, dict) and data.get("error"):
+        raise RuntimeError(json.dumps(data["error"]))
+    return data
 
-def list_ids(q):
-    ids=[]; token=None
+
+def paginate(resource, method, params, key):
+    out = []
+    token = None
     while True:
-        params={'userId':'me','q':q,'maxResults':100}
-        if token: params['pageToken']=token
-        d=gws('users messages','list',params)
-        ids.extend([m['id'] for m in d.get('messages',[])])
-        token=d.get('nextPageToken')
-        if not token: return ids
+        p = dict(params)
+        p["maxResults"] = 100
+        if token:
+            p["pageToken"] = token
+        data = gws(resource, method, p)
+        out.extend(data.get(key, []))
+        token = data.get("nextPageToken")
+        if not token:
+            return out
+
 
 def headers(msg):
-    return {h['name'].lower():h.get('value','') for h in msg.get('payload',{}).get('headers',[])}
+    return {
+        str(h.get("name", "")).lower(): str(h.get("value", ""))
+        for h in msg.get("payload", {}).get("headers", [])
+    }
 
-def get(id): return gws('users messages','get',{'userId':'me','id':id,'format':'full'})
 
-for name,q in [('spam','in:inbox category:promotions is:unread older_than:3d'),('unread','is:unread in:inbox')]:
-    ids=list_ids(q)
-    print('\n==',name,len(ids),'==')
-    for i,id in enumerate(ids[:250]):
-        m=get(id); h=headers(m)
-        print(f"{i+1:3} {id} labels={','.join(m.get('labelIds',[]))}\n    From: {h.get('from','')}\n    Subj: {h.get('subject','')}\n    Date: {h.get('date','')}\n    Snip: {m.get('snippet','')[:220].replace(chr(10),' ')}")
+def decode_part(part):
+    mime = part.get("mimeType", "")
+    data = part.get("body", {}).get("data")
+    texts = []
+    if data and (mime.startswith("text/plain") or mime.startswith("text/html")):
+        try:
+            texts.append(base64.urlsafe_b64decode(data + "=" * (-len(data) % 4)).decode("utf-8", "replace"))
+        except Exception:
+            pass
+    for child in part.get("parts", []) or []:
+        texts.extend(decode_part(child))
+    return texts
+
+
+def fetch(item):
+    msg = gws("users messages", "get", {"userId": "me", "id": item["id"], "format": "full"})
+    h = headers(msg)
+    text = "\n".join(decode_part(msg.get("payload", {})))
+    compact = " ".join(text.split())
+    return {
+        "id": msg.get("id", ""),
+        "threadId": msg.get("threadId", ""),
+        "labels": msg.get("labelIds", []),
+        "from": h.get("from", ""),
+        "to": h.get("to", ""),
+        "subject": h.get("subject", ""),
+        "date": h.get("date", ""),
+        "messageIdHeader": h.get("message-id", ""),
+        "references": h.get("references", ""),
+        "replyTo": h.get("reply-to", ""),
+        "listUnsubscribe": h.get("list-unsubscribe", ""),
+        "snippet": (msg.get("snippet") or compact)[:500],
+        "bodyPreview": compact[:1200],
+    }
+
+
+def main():
+    labels = gws("users labels", "list", {"userId": "me"}).get("labels", [])
+    promos = paginate(
+        "users messages",
+        "list",
+        {"userId": "me", "q": "in:inbox category:promotions is:unread older_than:3d"},
+        "messages",
+    )
+    unread = paginate(
+        "users messages",
+        "list",
+        {"userId": "me", "q": "is:unread in:inbox"},
+        "messages",
+    )
+    ids = {m["id"]: m for m in promos + unread}
+    full = []
+    errors = []
+    with concurrent.futures.ThreadPoolExecutor(max_workers=1) as ex:
+        futures = {ex.submit(fetch, m): m["id"] for m in ids.values()}
+        for fut in concurrent.futures.as_completed(futures):
+            try:
+                full.append(fut.result())
+            except Exception as e:
+                errors.append({"id": futures[fut], "error": str(e)[:200]})
+    full.sort(key=lambda x: x["date"])
+    print(json.dumps({
+        "labels": [{"id": x.get("id"), "name": x.get("name")} for x in labels],
+        "promoIds": [x["id"] for x in promos],
+        "unreadIds": [x["id"] for x in unread],
+        "messages": full,
+        "errors": errors,
+    }))
+
+
+if __name__ == "__main__":
+    main()

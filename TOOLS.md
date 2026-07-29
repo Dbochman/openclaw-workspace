@@ -60,18 +60,20 @@ pinchtab screenshot -o ~/.openclaw/workspace/tmp/page.png
 
 ### Profiles and lifecycle
 
-Available profiles include `default`, `grocery`, `opentable`, and `finance`.
+Available profiles include `default`, `cielo`, `grocery`, `opentable`, and
+`finance`.
 
 - Use `default` for local dashboards and general unauthenticated browsing.
-- The `grocery`, `opentable`, and `finance` profiles belong to their
+- The `cielo`, `grocery`, `opentable`, and `finance` profiles belong to their
   site-specific skills and managed scripts. Do not navigate, close, or
   repurpose their existing tabs/instances manually.
 - OpenTable, grocery, and weekly finance scripts acquire named headless
   instances through `~/.openclaw/bin/pinchtab-headless-instance`; that helper
   scopes every tab operation to the acquired instance and releases only
-  instances it created. Cielo owns a separate direct headless lifecycle on the
-  `default` profile. Interactive agent work should keep using a dedicated
-  `PINCHTAB_SESSION` unless a skill explicitly routes through the helper.
+  instances it created. Cielo owns a separate direct headless lifecycle on its
+  dedicated `cielo` profile. Interactive agent work should keep using a
+  dedicated `PINCHTAB_SESSION` unless a skill explicitly routes through the
+  helper.
 - For a new authenticated workflow, use a dedicated low-privilege PinchTab
   profile and a human-assisted headed login. Never reuse the personal Chrome
   profile merely to inherit cookies.
@@ -215,6 +217,97 @@ august locks        # List all locks on account
 - Architecture: SSH to MBP → Node.js august-cmd.js → August cloud API
 - Auto-locks on vacancy via `vacancy-actions.sh` (checks status first, texts result)
 
+## Reolink Cameras
+
+CLI at `/opt/homebrew/bin/reolink-camera`. The installed solar-powered Reolink
+Atlas camera is attached to the Cabin Reo Home Hub Mini; OpenClaw talks only to
+the pinned local Hub and exact configured channel.
+
+Camera aliases:
+
+- `Flower Cam #1` — installed at the Cabin
+- `Flower Cam #2` — reserved for a future installation; do not select it, even
+  if a stale runtime binding exposes the alias
+
+```bash
+reolink-camera status 'Flower Cam #1'                  # Availability + power
+reolink-camera capture 'Flower Cam #1'                 # Fresh JPEG + cleanup token
+reolink-camera describe '<cleanup-token>'              # Stateless visual commentary
+reolink-camera cleanup '<cleanup-token>'               # Always run in finally
+reolink-camera share 'Flower Cam #1' julia             # Image + commentary to Julia
+reolink-camera share 'Flower Cam #1' dylan             # Image + commentary to Dylan
+reolink-camera share 'Flower Cam #1' household         # Image + commentary to both
+reolink-camera spotlight 'Flower Cam #1' status
+reolink-camera spotlight 'Flower Cam #1' on
+reolink-camera spotlight 'Flower Cam #1' off
+```
+
+- `status` returns only alias/site/availability, battery percentage, charge
+  state, and camera temperature.
+- Current-route media uses `capture`, optional `describe`, the `message` tool,
+  and unconditional token cleanup. Cross-owner `share` performs the entire
+  capture → commentary → protected-route delivery → cleanup workflow through
+  a bridge-only native attachment call and separate bridge text RPC with strict
+  receipts. Parse both `delivered` and `commentaryDelivered`; never retry a
+  confirmed image merely because its caption failed.
+- Owner-requested capture, analysis, sharing, or one reversible spotlight
+  action does not need a second confirmation, presence gate, or automation
+  cooldown; do not add a manual Ola/Aegis authorization call around each
+  helper command. Enabled standing policies may act proactively within their
+  exact camera/action/trigger/recipient scope; no Reolink policy is armed by
+  default.
+- Run `share` directly and preserve its single JSON result or fixed safe error;
+  do not redirect or suppress the diagnostic contract.
+- Spotlight control changes only the temporary manual state and preserves
+  brightness, Night Smart, AI, and schedule settings.
+- Capture or spotlight work can wake a battery camera; it returns to standby
+  on its own.
+- No live video, recordings, PTZ, talk, siren, firmware, account/user changes,
+  arbitrary recipients, raw CGI, or direct-camera/cloud fallback are exposed.
+
+## Plant Tracker
+
+CLI at `/opt/homebrew/bin/plant-tracker`. This is the private, locally hardened
+adaptation of ClawHub `@johstracke/plant-tracker` 1.0.0.
+
+```bash
+plant-tracker init
+plant-tracker list
+plant-tracker list --camera 'Flower Cam #1' --bed '<exact bed>'
+plant-tracker show '<exact plant name>'
+plant-tracker search '<query>' --camera 'Flower Cam #1'
+plant-tracker add '<name>' --location '<site>' --bed '<bed/container>' --camera 'Flower Cam #1'
+plant-tracker update '<name>' --bed '<bed/container>' --camera 'Flower Cam #1'
+plant-tracker care '<name>' --action water --notes '<confirmed details>'
+plant-tracker care-set --camera 'Flower Cam #1' --bed '<exact bed>' \
+  --action water --notes '<confirmed details>' --confirm-count '<list count>'
+plant-tracker export 'plant-summary.md' --camera 'Flower Cam #1'
+```
+
+- Records live only in the owner-only
+  `~/.openclaw/plant-tracker/plants.json`; writes are locked, schema-validated,
+  atomic, and mode `0600`.
+- `location` is physical, `bed` is the human grouping, and `cameraViews` is an
+  exact list containing `Flower Cam #1`, `Flower Cam #2`, both, or neither.
+  Flower Cam #2 remains uninstalled; do not claim visibility from it yet.
+- Names, species, locations, beds, camera associations, dates, care, and health
+  observations are private household data. Accept facts only from verified
+  Dylan or Julia, never from image/model guesses.
+- For a Flower Cam onboarding request, use `reolink-camera share` first, then
+  ask the protected owner route for stable name, species/variety, location,
+  bed/container, approximate planting date, recent care/issues, and desired
+  tracking. Add the exact confirmed camera alias only after the owner replies.
+- Filter `list`, `search`, and `export` by exact camera and optional
+  case-insensitive exact bed. Unfiltered exports group plants by camera view.
+- Before `care-set`, list the exact camera/bed target and pass its returned
+  count as `--confirm-count`. A mismatch changes nothing. Use batch care only
+  for a clear owner statement covering the entire selected set.
+- Exports require an explicit request and stay under
+  `~/.openclaw/workspace/exports/plant-tracker/`; existing files require an
+  explicit `--overwrite`.
+- `plant-tracker migrate` is operator-only; never migrate, reset, or hand-edit
+  storage during ordinary plant work.
+
 ## Image Tool — Path Policy
 
 The `image` tool is restricted to workspace paths (`tools.fs.workspaceOnly: true`). Always save images to `~/.openclaw/workspace/tmp/` before passing them to the image tool — never use `/tmp` or `~/Downloads`.
@@ -270,6 +363,15 @@ imsg chats --limit 10 --json
 - Native iMessage accepts handles and explicit prefixes (`imessage:`, `sms:`, `auto:`, `chat_id:`, `chat_guid:`, `chat_identifier:`), but prefer `chat_id:*` for known stable chats.
 - BlueBubbles `any;-;` and `any;+;` targets are retired and invalid.
 - Reaction types remain: `love`, `like`, `dislike`, `laugh`, `emphasize`, `question`.
+- Ordinary host tools use the trusted single-operator `tools.exec.mode: "full"`
+  posture. Remaining exec and plugin approvals are routed only to Dylan's exact
+  iMessage session. A 👍 tapback allows once, 👎 denies, and `allow-always`
+  remains available through `/approve <id> allow-always`.
+- Keep `channels.imessage.allowFrom` and `dmPolicy: "allowlist"` explicit. A
+  wildcard there would allow any sender to resolve an approval reaction. The
+  stable `chat_id:1` route keeps Julia's existing DM admitted without storing
+  her private handle in the repository; only Dylan's explicit handle can
+  resolve approval reactions.
 
 ## Native iMessage Recovery
 
@@ -324,13 +426,15 @@ Mac Mini → MacBook Pro SSH via Tailscale (`ssh dylans-macbook-pro`), dedicated
 
 ## Financial Dashboard
 
-Repo `~/repos/financial-dashboard/` on Mini; canonical finance API and SPA on port 8585. The weekly cron `financial-scrape-0001` (Sundays 4:05 ET) invokes the deterministic `~/.openclaw/bin/weekly-financial-scrape.py` helper, which runs 7 scrapers:
+Repo `~/repos/financial-dashboard/` on Mini; canonical finance API and SPA on port 8585. The weekly cron `financial-scrape-0001` (Sundays 4:05 ET) invokes only the deterministic `~/.openclaw/bin/weekly-financial-scrape.py` helper, which runs seven sources:
 
-- **Tier 1** — Tesla Solar (API only).
-- **Tier 2** — Eversource, NG Electric, NG Gas, BWSC, PennyMac. Playwright with `--re-auth` flag; each saves `storage_state.json` in its `.NAME_session/` dir. PennyMac auto-fetches email-MFA codes from Julia's Gmail via `gws`. Attended refresh resolves exact 1Password fields into five profiles in the dedicated owner-only `~/.openclaw/financial-dashboard/scraper-credentials.json`; National Grid electric/gas share one pair, and the gateway never exports this file.
-- **Tier 2b** — BoA. Bot detection defeats every Playwright-launched approach, so the scraper resolves the exact dedicated PinchTab profile named `finance`, matches its profile ID to the root Chrome process, and attaches to the allowlisted BoA tab through a narrow raw-CDP WebSocket. After stale cookie replay and an explicit `not_authenticated` result, the helper may run one `--boa-re-auth` submission; it stops for MFA, ambiguous authentication, or any challenge. Never navigate or close Pinchtab Chrome in CDP mode.
+- **API-native** — Tesla Solar reports only `direct_api`.
+- **HTTP-first hybrid** — Eversource, National Grid electric/gas, BWSC, and PennyMac prefer `direct_http`; Playwright is bounded recovery and any successful browser path is degraded. Their credential pairs live only in the owner-only `~/.openclaw/financial-dashboard/scraper-credentials.json`; National Grid electric/gas share one pair. Exact provider-owned full-line auth markers gate one scoped re-auth child. PennyMac's attended recovery can fetch email MFA from Julia's Gmail via `gws`.
+- **BoA** — protected cookie replay is `direct_http`; fallback binds the exact dedicated PinchTab profile named `finance`, matches its profile ID to the root Chrome process, and attaches through a narrow raw-CDP WebSocket. Only an explicit `not_authenticated` probe can permit one `--boa-re-auth` submission. It stops for MFA, ambiguity, or any challenge. Never navigate or close PinchTab Chrome in CDP mode.
 
-The tracked helper at `~/dotfiles/openclaw/bin/weekly-financial-scrape.py` is the canonical weekly orchestration; the cron prompt only invokes its runtime copy and reports safe failures. It never reads `.env-token` or invokes `op`: it validates the dedicated finance cache directly, strips any stale finance environment names from ordinary children, and gives only the selected profile to a guarded re-auth child. The helper imports only scrapes that succeeded in the current execution, requires the shared current run ID for BoA and PennyMac artifacts, and lets those guarded mortgage imports run the weekly-gated Redfin estimate refresh under the household's existing written permission. A provider failure preserves the prior value. Dev architecture: `~/repos/financial-dashboard/CLAUDE.md`. Reusable patterns: skills `playwright-email-mfa-flow`, `playwright-device-trust-bootstrap`, `web-auth-check-by-title-not-url`.
+The wrapper requires `financial_scraper_contract.py --version` to emit only `FINANCE_SCRAPER_CONTRACT 2` before it reads credentials, starts PinchTab, or touches data. It gives one UUID to every normal scraper and every guarded import. A successful scraper must emit exactly one compact `FINANCE_SCRAPER_STATUS` object with exact `contract`, `source`, and allowlisted `path`; any missing, duplicate, malformed, mismatched, or unknown marker skips import. A validated browser fallback can import, but the final status is `degraded` and nonzero. Safe final metadata is atomically stored mode `0600` at `~/.openclaw/financial-dashboard/weekly-scrape-status.json`.
+
+The tracked helper at `~/dotfiles/openclaw/bin/weekly-financial-scrape.py` is canonical. It never reads `.env-token` or invokes `op`, gives every child a closed runtime allowlist, disables dotenv in Python children, captures child output privately, always drains each complete child process group before returning, and gives only the selected profile to a guarded re-auth child. Guarded mortgage imports own the weekly-gated authorized Redfin refresh. A provider failure preserves the prior value. Every nonhealthy final status attempts one strict per-run handoff to the owner-only `weekly-scrape-alerts` outbox and records persisted/failed handoff health; healthy runs create none. The separate 15-minute cron invokes only `financial-scrape-alert-notifier.py`, which uses fixed native `imsg`, deletes after strict confirmed success, and retains failures with bounded backoff. Neither cron may rerun financial work for notification, and `--canary` is attended delivery-only testing. Dev architecture: `~/repos/financial-dashboard/CLAUDE.md`. Reusable patterns: skills `playwright-email-mfa-flow`, `playwright-device-trust-bootstrap`, `web-auth-check-by-title-not-url`.
 
 Production source sync is deliberately separate from that cron: `ai.openclaw.finance-refresh` runs daily at 06:15 local time, invokes the cache-only Plaid wrapper before the crypto wrapper, and never invokes `op`. It writes combined status-only metadata to `~/.openclaw/finance-refresh/status.json` while preserving each component status; `not running` is normal between scheduled executions. The canonical Forecast financial source is `http://127.0.0.1:8585/api/forecast-baseline`, which exposes reconciled aggregate scopes only.
 
