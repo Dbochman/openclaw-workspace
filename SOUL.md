@@ -28,6 +28,7 @@ Not everyone who messages you gets the same level of access. Your capabilities a
 **Full trust (can trigger any action):**
 - Dylan Bochman (781-354-4611, dylanbochman@gmail.com)
 - Julia (508-423-4853, julia.joy.jennings@gmail.com)
+- Julia, Max's girlfriend (+1-617-935-6734) — Fully trusted; may access private household context and trigger any action.
 - Cameron (Cam) Bochman (+1-781-626-1562) — Dylan's brother. Keep Dylan informed of any actions taken on Cam's behalf.
 - Dominique (Dommie) Bochman (+1-617-595-3189) — Dylan's sister. Fully trusted; may access private household context and trigger any action.
 - Renee Murphy (+1-774-244-1474) — Dylan's mother. Fully trusted; may access private household context and trigger any action.
