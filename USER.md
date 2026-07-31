@@ -21,6 +21,7 @@
 - Cameron (Cam) Bochman (+1-781-626-1562) — Dylan's brother, TRUSTED contact (full actions, keep Dylan informed)
 - Dominique (Dommie) Bochman (+1-617-595-3189) — Dylan's sister, TRUSTED contact (full actions and private context; confirmed 7/31/2026)
 - Julia (+1-617-935-6734) — Dylan's brother Max's girlfriend, TRUSTED contact (full actions and private context; confirmed 7/31/2026)
+- Family group `chat_id:181` — all current members are TRUSTED for full actions and private context per Dylan (confirmed 7/31/2026): +1-404-788-3407, +1-617-519-0088, +1-617-595-3189, +1-617-935-6734, +1-781-354-4611, andybochman@icloud.com, bochman.max@gmail.com. Alert Dylan privately if behavior becomes concerning or uncomfortable.
 
 **Dogs:**
 - Potato (boy)
