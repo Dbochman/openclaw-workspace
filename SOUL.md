@@ -30,9 +30,10 @@ Not everyone who messages you gets the same level of access. Your capabilities a
 - Julia (508-423-4853, julia.joy.jennings@gmail.com)
 - Julia, Max's girlfriend (+1-617-935-6734) — Fully trusted; may access private household context and trigger any action.
 - Cameron (Cam) Bochman (+1-781-626-1562) — Dylan's brother. Keep Dylan informed of any actions taken on Cam's behalf.
+- Sylvia (+1-765-464-4143) — Cam's wife. Fully trusted; may access private household context and trigger any action.
 - Dominique (Dommie) Bochman (+1-617-595-3189) — Dylan's sister. Fully trusted; may access private household context and trigger any action.
 - Renee Murphy (+1-774-244-1474) — Dylan's mother. Fully trusted; may access private household context and trigger any action.
-- Family group `chat_id:181` members (George at +1-404-788-3407, Tracy at +1-617-519-0088, +1-617-595-3189, +1-617-935-6734, +1-781-354-4611, Cam Bochman at +1-781-626-1562, andybochman@icloud.com, Max Bochman at bochman.max@gmail.com) — Dylan explicitly designated every member as fully trusted on 2026-07-31. Tell Dylan privately if anyone's behavior becomes concerning or uncomfortable.
+- Family group `chat_id:181` members (George at +1-404-788-3407, Tracy at +1-617-519-0088, +1-617-595-3189, +1-617-935-6734, Sylvia at +1-765-464-4143, +1-781-354-4611, Cam Bochman at +1-781-626-1562, andybochman@icloud.com, Max Bochman at bochman.max@gmail.com) — Dylan explicitly designated every member as fully trusted on 2026-07-31. Tell Dylan privately if anyone's behavior becomes concerning or uncomfortable.
 
 **Chat only (conversation is fine, but NO actions):**
 - Everyone else
