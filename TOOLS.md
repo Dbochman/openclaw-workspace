@@ -71,7 +71,10 @@ Available profiles include `default`, `cielo`, `grocery`, `opentable`, and
   instances through `~/.openclaw/bin/pinchtab-headless-instance`; that helper
   scopes every tab operation to the acquired instance and releases only
   instances it created. Cielo owns a separate direct headless lifecycle on its
-  dedicated `cielo` profile. Interactive agent work should keep using a
+  dedicated `cielo` profile. Durable Cielo recovery must use
+  `cielo-reauth --attended start` before the visible login and
+  `cielo-reauth finish` afterward so the refresh token is captured and proven;
+  never improvise a post-login access-token-only capture. Interactive agent work should keep using a
   dedicated `PINCHTAB_SESSION` unless a skill explicitly routes through the
   helper.
 - For a new authenticated workflow, use a dedicated low-privilege PinchTab
@@ -141,7 +144,8 @@ restaurant-book run --job-id <canonical-job-id>
   an attended shell. That command does not populate Resy's separate provider
   cache; recover a missing Resy cache with attended-TTY `resy auth`, never from
   the gateway or cron. OpenTable's weekly LaunchAgent refreshes its bound
-  token; attended recovery is
+  token and gets one bounded retry after 30 minutes; attended recovery after
+  both attempts fail is
   `~/.openclaw/bin/opentable-refresh-token.sh`.
 - Never print or inspect protected caches, browser contents, or raw responses.
   Handle provider tokens, booking URLs, approval IDs, and
@@ -159,6 +163,9 @@ restaurant-book run --job-id <canonical-job-id>
 - Google Nest cameras
 - Google smart speakers
 - Petlibro feeder + fountain (unplugged, seasonal)
+- Litter-Robot 4 (exact protected Cabin binding via pylitterbot)
+- Two Midea Wi-Fi air conditioners (local LAN V3): `cabin-air-conditioner` and `cabin-lil-air-conditioner`
+- Airthings Wave Enhance air-quality monitor (local BLE): `cabin-living-room-airthings`
 
 ### Crosstown (West Roxbury)
 - Philips Hue lights
@@ -168,11 +175,76 @@ restaurant-book run --job-id <canonical-job-id>
 - Eight Sleep Pod 3 (cloud API, both sides: Dylan left, Julia right)
 - Petlibro Granary Smart Feeder + Dockstream 2 Cordless Fountain (cloud API)
 - Google smart speakers
-- Litter-Robot 4 (cloud API via pylitterbot, tracks Sopaipilla + Burrito weights)
+- Litter-Robot 4 (exact protected Crosstown binding via pylitterbot; Whisker also tracks Sopaipilla + Burrito weights)
 - August Wi-Fi Smart Lock (5th gen, front door — cloud API via august-api on MBP)
 
 ### Vacancy Automation
-When a house becomes `confirmed_vacant` (both people detected at the other location), the `vacancy-actions` LaunchAgent turns off lights, sets thermostat to eco, turns off Cielos (Crosstown only), locks the Crosstown front door, and starts all Roombas. Independently, each person's sticky detected location is made current on Eight Sleep and their side on the other Pod becomes away. iMessage notification is sent for lock status.
+When a house becomes `confirmed_vacant` (both people detected at the other location), the `vacancy-actions` LaunchAgent turns off lights, sets thermostat to eco, turns off Cielos (Crosstown only), locks the Crosstown front door, and starts all Roombas. For Crosstown, the event-bus action worker also disables the exact standing Hue routines selected in its protected policy, remembers only those that were previously enabled, keeps the set disabled during confident vacancy, and restores that prior set after a fresh sticky-resident return. Independently, each person's sticky detected location is made current on Eight Sleep and their side on the other Pod becomes away. iMessage notification is sent for lock status.
+
+The event bus also has disabled-by-default `feeding_schedule` targets for
+`cabin-feeder` and `crosstown-feeder`. They require continuous future-only
+activity coverage from both exact Litter-Robots plus canonical vacancy. A
+qualifying transfer restores and verifies an OpenClaw-owned destination pause
+before suspending the vacant home's schedule. It never resumes a manual pause,
+dispenses food, edits meals, or uses litter activity as occupancy truth.
+
+Use `hue --<site> automations` for safe routine inventory and
+`hue --<site> automation status|enable|disable '<exact name>'` for guarded
+control. Do not fuzzy-match routine names. A manual enable of a managed
+Crosstown routine during confirmed vacancy will be corrected by the worker.
+
+## Midea Air Conditioners
+
+CLI at `/opt/homebrew/bin/midea-ac`. Two Cabin units use exact local bindings;
+ordinary status and controls do not require the Midea cloud account.
+
+```bash
+midea-ac status --json
+midea-ac devices --json
+midea-ac temperature cabin-air-conditioner 72 --json
+midea-ac mode cabin-lil-air-conditioner cool --json
+midea-ac fan cabin-air-conditioner medium --json
+```
+
+- Use only exact aliases returned by `devices`; never substitute the other AC.
+- The owner-only binding is `~/.openclaw/midea-ac/bindings.json` (mode `0600`).
+- The locked Python runtime is `~/.openclaw/venvs/midea-ac` and is pinned by
+  the deployed skill's `uv.lock`.
+- Cloud credentials are attended-enrollment inputs only and are never retained.
+- Continuous temperature or energy samples do not belong on the home-event
+  bus. Consider only debounced availability and nonzero error transitions
+  after a clean status soak.
+
+## Airthings Monitor
+
+CLI at `/opt/homebrew/bin/airthings`. The exact Cabin Living Room Wave Enhance
+uses local BLE only; no Airthings account or cloud credential is retained.
+
+```bash
+airthings status --json
+airthings devices --json
+```
+
+- The protected binding is `~/.openclaw/airthings/config.json` (mode `0600`).
+- The locked runtime is `~/.openclaw/venvs/airthings-monitor`; macOS must list
+  and enable the Homebrew `Python.app` under Privacy & Security → Bluetooth.
+  The wrapper uses that app identity for fresh unattended reads; Terminal's
+  separate Bluetooth grant does not cover the scheduled snapshot.
+- Status includes CO2, VOC, temperature, humidity, pressure, ambient noise,
+  light, battery, and a five-minute cache age when applicable.
+- A dedicated `ai.openclaw.airthings-snapshot` LaunchAgent requests one exact
+  local BLE reading every five minutes and writes it to the climate dashboard's
+  shared history. Its protected status-only health lives at
+  `~/.openclaw/airthings/snapshot-status.json`.
+- The readings are environmental context only. They do not prove occupancy,
+  publish to the home-event bus, or authorize HVAC/lighting actions.
+- Enrollment is operator-only and requires `AIRTHINGS_ALLOW_ENROLL=1`;
+  ordinary OpenClaw skill use is read-only.
+- Historical CSV import is also operator-only. Do not invoke
+  `airthings-history-import`; it is intentionally outside this skill's allowed
+  tools and requires an attended environment gate plus `--apply`.
+- Do not invoke `airthings-snapshot`; the scheduled sampler is service-owned,
+  not a model tool.
 
 ## Eight Sleep Pod
 
@@ -423,6 +495,55 @@ These tools are part of the `file-transfer` plugin (added v2026.5.3) and operate
 
 Mac Mini → MacBook Pro SSH via Tailscale (`ssh dylans-macbook-pro`), dedicated key `~/.ssh/id_mini_to_mbp` (bypasses 1Password agent — hangs under launchd). Configured via `Match originalhost` in `~/.ssh/config`.
 
+## RTX 5090 Desktop Compute
+
+Use the `desktop-compute` skill and helper for general Linux, Windows, CUDA,
+media, data-processing, and long-running work on the private RTX 5090 desktop.
+It stages inputs under fixed roots, binds each run to an exact script SHA-256,
+keeps the job in tmux, returns bounded progress, and checksum-verifies fetched
+outputs. Choose the default Linux scope unless a PowerShell script or
+Windows-native application requires `--scope windows`.
+
+Use the more specific `remote-splat` skill for private COLMAP, Brush,
+Gaussian-splat training, `.sog`/`.ply` retrieval, and guarded SuperSplat
+preparation. It now builds on the shared job interface while retaining the
+splat-only output and publishing rules. It also prepares long videos into
+timecoded review packages and semantic frame manifests. Multi-gigabyte source
+files may use its fixed-host `inbox-stage` Taildrop path, but an approved job
+must verify the returned digest before ingest; each audit, preparation,
+connectivity, training, and validation phase gets a distinct immutable job
+name. Fetch is restricted to `.sog`/`.ply` model artifacts and generated
+`.webp` visual-QA renders; only model artifacts can enter publication planning.
+
+The reusable host transport is a loopback-only reverse tunnel from the
+desktop's dedicated non-sudo Ubuntu/WSL account. The interactive Mini-local
+`desktop-compute` SSH alias is for trusted operator maintenance. OpenClaw uses
+the separate `desktop-jobs` key, which is forced through a root-owned dispatcher
+and cannot open an arbitrary shell or forwarding. Do not use the raw desktop
+Tailscale IP as an SSH endpoint and do not bypass either skill with raw SSH,
+`scp`, or `rsync`.
+
+The account has no Linux `sudo` membership, but an approved script can reach
+Windows and re-enter WSL as root through Windows interop. This is why both keys
+stay only on the Mini and OpenClaw's operational boundary is the fixed-root,
+hash-approved dispatcher.
+
+```bash
+desktop-compute status
+desktop-compute progress --job <job>
+remote-splat status
+remote-splat progress --job <job>
+remote-splat video-review --source <video> --output <new-review-dir> --proxy
+remote-splat video-extract --manifest <segments.json> --output <new-extract-dir> --dry-run
+```
+
+Long jobs run in per-job `tmux` sessions. The current bridge is TCP-only, so
+Mosh is not available. `publish-plan` only hashes and describes a local
+artifact; a SuperSplat upload always requires fresh explicit confirmation.
+Video review/extraction runs locally on the Mini with FFmpeg/FFprobe and an
+optional headless PySceneDetect pass. Originals remain immutable; generated
+proxies, clips, and frames strip audio and source metadata.
+
 ## Financial Dashboard
 
 Repo `~/repos/financial-dashboard/` on Mini; canonical finance API and SPA on port 8585. The weekly cron `financial-scrape-0001` (Sundays 4:05 ET) invokes only the deterministic `~/.openclaw/bin/weekly-financial-scrape.py` helper, which runs seven sources:
@@ -433,7 +554,7 @@ Repo `~/repos/financial-dashboard/` on Mini; canonical finance API and SPA on po
 
 The wrapper requires `financial_scraper_contract.py --version` to emit only `FINANCE_SCRAPER_CONTRACT 2` before it reads credentials, starts PinchTab, or touches data. It gives one UUID to every normal scraper and every guarded import. A successful scraper must emit exactly one compact `FINANCE_SCRAPER_STATUS` object with exact `contract`, `source`, and allowlisted `path`; any missing, duplicate, malformed, mismatched, or unknown marker skips import. A validated browser fallback can import, but the final status is `degraded` and nonzero. Safe final metadata is atomically stored mode `0600` at `~/.openclaw/financial-dashboard/weekly-scrape-status.json`.
 
-The tracked helper at `~/dotfiles/openclaw/bin/weekly-financial-scrape.py` is canonical. It never reads `.env-token` or invokes `op`, gives every child a closed runtime allowlist, disables dotenv in Python children, captures child output privately, always drains each complete child process group before returning, and gives only the selected profile to a guarded re-auth child. Guarded mortgage imports own the weekly-gated authorized Redfin refresh. A provider failure preserves the prior value. Every nonhealthy final status attempts one strict per-run handoff to the owner-only `weekly-scrape-alerts` outbox and records persisted/failed handoff health; healthy runs create none. The separate 15-minute cron invokes only `financial-scrape-alert-notifier.py`, which uses fixed native `imsg`, deletes after strict confirmed success, and retains failures with bounded backoff. Neither cron may rerun financial work for notification, and `--canary` is attended delivery-only testing. Dev architecture: `~/repos/financial-dashboard/CLAUDE.md`. Reusable patterns: skills `playwright-email-mfa-flow`, `playwright-device-trust-bootstrap`, `web-auth-check-by-title-not-url`.
+The tracked helper at `~/dotfiles/openclaw/bin/weekly-financial-scrape.py` is canonical. It never reads `.env-token` or invokes `op`, gives every child a closed runtime allowlist, disables dotenv in Python children, captures child output privately, always drains each complete child process group before returning, and gives only the selected profile to a guarded re-auth child. Guarded mortgage imports own the weekly-gated authorized Redfin refresh. A provider failure preserves the prior value. Every nonhealthy final status attempts one strict per-run handoff to the owner-only `weekly-scrape-alerts` outbox and records persisted/failed handoff health; healthy runs create none. After an attended BoA login repair, run `python3 ~/.openclaw/bin/weekly-financial-scrape.py --recover-source boa`; it reruns only BoA and reconciles the protected weekly status so reports stop showing the resolved failure. The separate 15-minute cron invokes only `financial-scrape-alert-notifier.py`, which uses fixed native `imsg`, deletes after strict confirmed success, and retains failures with bounded backoff. Neither cron may rerun financial work for notification, and `--canary` is attended delivery-only testing. Dev architecture: `~/repos/financial-dashboard/CLAUDE.md`. Reusable patterns: skills `playwright-email-mfa-flow`, `playwright-device-trust-bootstrap`, `web-auth-check-by-title-not-url`.
 
 Production source sync is deliberately separate from that cron: `ai.openclaw.finance-refresh` runs daily at 06:15 local time, invokes the cache-only Plaid wrapper before the crypto wrapper, and never invokes `op`. It writes combined status-only metadata to `~/.openclaw/finance-refresh/status.json` while preserving each component status; `not running` is normal between scheduled executions. The canonical Forecast financial source is `http://127.0.0.1:8585/api/forecast-baseline`, which exposes reconciled aggregate scopes only.
 
@@ -452,9 +573,10 @@ Repo `~/repos/Financial Advisor/` on Mini; interactive forecast dashboard on por
 
 | Dashboard | Port | Data |
 |---|---|---|
-| Nest Climate | 8550 | Thermostat + weather + presence |
+| Nest Climate | 8550 | Thermostat + AC + Airthings air quality + weather + presence |
 | Usage | 8551 | Token consumption + agent activity |
 | Dog Walk | 8552 | Walk history, Fi GPS, Roomba status, route maps |
+| Cat Care | 8554 | Cat weights, litter activity, Whisker robots, and Petlibro food/water/schedule state |
 | Financial | 8585 | Canonical finance, utilities, mortgage, source reconciliation, and forecast baseline |
 | Forecast | 8586 | Interactive projections seeded from the reconciled current-day baseline |
 

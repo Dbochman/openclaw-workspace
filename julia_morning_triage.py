@@ -7,10 +7,12 @@ import re
 import subprocess
 import sys
 import time
+from datetime import datetime
+from zoneinfo import ZoneInfo
 from collections import defaultdict
 
 ACCOUNT = 'julia.joy.jennings@gmail.com'
-DATE = '2026-06-26'
+DATE = datetime.now(ZoneInfo('America/New_York')).date().isoformat()
 LABEL_NAMES = [
     'OpenClaw/Urgent', 'OpenClaw/Action', 'OpenClaw/FYI', 'OpenClaw/Financial',
     'OpenClaw/Shopping', 'OpenClaw/Newsletters', 'OpenClaw/Social'
@@ -45,13 +47,12 @@ def run_gws(parts, params=None, body=None, timeout=120, retry_auth=True):
     cmd = ['gws'] + parts + ['--params', json.dumps(params, separators=(',', ':'))]
     if body is not None:
         cmd += ['--json', json.dumps(body, separators=(',', ':'))]
-    cmd += ['--account', ACCOUNT]
     p = subprocess.run(cmd, capture_output=True, text=True, timeout=timeout)
     out = (p.stdout or '').strip()
     err = (p.stderr or '').strip()
     if p.returncode != 0:
         combined = (out + '\n' + err).strip()
-        if retry_auth and ('auth' in combined.lower() or 'credentials' in combined.lower() or 'token' in combined.lower()):
+        if retry_auth and 'Failed to get token' in combined:
             time.sleep(5)
             p = subprocess.run(cmd, capture_output=True, text=True, timeout=timeout)
             out = (p.stdout or '').strip()
@@ -250,14 +251,18 @@ try:
                 trash_ids.append(mid)
         except Exception as e:
             RESULT['status'] = 'partial'; RESULT['errors'].append({'stage':'spam_fetch','messageId':mid,'message':str(e)[:160]})
-    if trash_ids:
-        batch_modify(trash_ids, add=['TRASH'], remove=['INBOX','UNREAD'])
-        RESULT['trashed'] = len(trash_ids)
+    for mid in trash_ids:
+        try:
+            run_gws(['gmail','users','messages','trash'], params={'userId':'me','id':mid})
+            RESULT['trashed'] += 1
+        except Exception as e:
+            RESULT['status'] = 'partial'; RESULT['errors'].append({'stage':'trash','messageId':mid,'message':str(e)[:160]})
 except Exception as e:
     RESULT['status'] = 'partial'; RESULT['errors'].append({'stage':'spam','message':str(e)[:180]})
 
 # 3. Triage unread inbox.
 processed_infos = []
+failed_ids = set()
 try:
     unread_ids = list_all_messages('is:unread in:inbox')
     for mid in unread_ids:
@@ -270,12 +275,13 @@ try:
             processed_infos.append({'id':mid,'threadId':m.get('threadId'),'headers':h,'labels':m.get('labelIds',[]),'class':cls,'reason':reason,'text':text,'snippet':m.get('snippet','')})
             RESULT['processed'] += 1
         except Exception as e:
+            failed_ids.add(mid)
             RESULT['status'] = 'partial'; RESULT['errors'].append({'stage':'fetch_classify','messageId':mid,'message':str(e)[:160]})
     # Apply label changes in batches with identical add/remove sets.
     groups = defaultdict(list)
     for info in processed_infos:
         stale_urgent = cls_to_id.get('Urgent') in info['labels'] and info['class'] != 'Urgent'
-        remove = set(primary_ids)
+        remove = set(primary_ids) - {cls_to_id[info['class']]}
         if info['class'] != 'Urgent':
             # Remove stale attention only if it was previously OpenClaw/Urgent.
             if stale_urgent:
@@ -290,6 +296,7 @@ try:
         except Exception as e:
             RESULT['status'] = 'partial'
             for mid in ids:
+                failed_ids.add(mid)
                 RESULT['errors'].append({'stage':'label','messageId':mid,'message':str(e)[:140]})
 except Exception as e:
     RESULT['status'] = 'partial'; RESULT['errors'].append({'stage':'triage','message':str(e)[:180]})
@@ -297,7 +304,7 @@ except Exception as e:
 # 4. Thread-aware drafts for Action messages.
 # Current run has no expected direct Action messages, but support the rule if one appears.
 try:
-    action_infos = [i for i in processed_infos if i['class'] == 'Action']
+    action_infos = [i for i in processed_infos if i['class'] == 'Action' and i['id'] not in failed_ids]
     draft_threads = set()
     if action_infos:
         for d in list_all_drafts():
@@ -325,7 +332,7 @@ try:
                         julia_after = True
             if julia_after or (latest_non_draft and latest_non_draft.get('id') != mid):
                 # Downgrade to FYI/read unless other action remains.
-                batch_modify([mid], add=[cls_to_id['FYI']], remove=primary_ids + ['UNREAD'])
+                batch_modify([mid], add=[cls_to_id['FYI']], remove=[x for x in primary_ids if x != cls_to_id['FYI']] + ['UNREAD'])
                 RESULT['markedRead'] += 1
                 info['read_done'] = True
                 continue
@@ -351,6 +358,7 @@ try:
             RESULT['draftsCreated'] += 1
             RESULT['attention'].append({'messageId':mid,'threadId':tid,'from':h.get('from',''),'subject':h.get('subject',''),'reason':'Reply draft needs Julia review','deadline':'','draftStatus':'created'})
         except Exception as e:
+            failed_ids.add(mid)
             RESULT['status'] = 'partial'; RESULT['errors'].append({'stage':'draft','messageId':mid,'message':str(e)[:160]})
 except Exception as e:
     RESULT['status'] = 'partial'; RESULT['errors'].append({'stage':'drafts','message':str(e)[:180]})
@@ -359,6 +367,9 @@ except Exception as e:
 try:
     keep_unread = set()
     for info in processed_infos:
+        if info['id'] in failed_ids:
+            keep_unread.add(info['id'])
+            continue
         if info.get('read_done'):
             continue
         cls = info['class']; h = info['headers']; mid = info['id']; tid = info['threadId']
@@ -375,29 +386,33 @@ try:
         elif any(s in (h.get('subject','')+' '+info.get('snippet','')).lower() for s in ['medical record','test result','legal notice']):
             keep_unread.add(mid)
             RESULT['attention'].append({'messageId':mid,'threadId':tid,'from':h.get('from',''),'subject':h.get('subject',''),'reason':'Sensitive medical or legal content should be reviewed','deadline':'','draftStatus':'none'})
-    read_ids = [i['id'] for i in processed_infos if i['id'] not in keep_unread and not i.get('read_done')]
+    read_ids = [i['id'] for i in processed_infos if i['id'] not in keep_unread and i['id'] not in failed_ids and not i.get('read_done')]
     if read_ids:
-        batch_modify(read_ids, remove=['UNREAD'])
-        RESULT['markedRead'] += len(read_ids)
-    RESULT['leftUnread'] = len(keep_unread) + sum(1 for i in processed_infos if i.get('force_left_unread'))
+        try:
+            batch_modify(read_ids, remove=['UNREAD'])
+            RESULT['markedRead'] += len(read_ids)
+        except Exception as e:
+            failed_ids.update(read_ids)
+            RESULT['status'] = 'partial'; RESULT['errors'].append({'stage':'read_state','message':str(e)[:180]})
 except Exception as e:
     RESULT['status'] = 'partial'; RESULT['errors'].append({'stage':'read_state','message':str(e)[:180]})
 
-# 6. Archive stale read mail.
+# 6. Archive successfully reviewed routine labeled mail and labeled backlog.
 try:
-    stale_ids = list_all_messages('is:read in:inbox older_than:1d')
-    eligible = []
-    for mid in stale_ids:
-        try:
-            m = get_msg(mid, 'full')
-            labs = set(m.get('labelIds',[]) or [])
-            if 'STARRED' in labs or cls_to_id.get('Urgent') in labs or cls_to_id.get('Action') in labs:
-                continue
-            eligible.append(mid)
-        except Exception as e:
-            RESULT['status'] = 'partial'; RESULT['errors'].append({'stage':'archive_fetch','messageId':mid,'message':str(e)[:160]})
+    eligible = set()
+    for cls in ['FYI','Financial','Shopping','Newsletters','Social']:
+        ids = list_all_messages(f'is:read in:inbox label:"{PRIMARY_LABELS[cls]}"')
+        for mid in ids:
+            try:
+                m = get_msg(mid, 'full')
+                labs = set(m.get('labelIds',[]) or [])
+                if 'UNREAD' in labs or 'STARRED' in labs or cls_to_id.get('Urgent') in labs or cls_to_id.get('Action') in labs:
+                    continue
+                eligible.add(mid)
+            except Exception as e:
+                RESULT['status'] = 'partial'; RESULT['errors'].append({'stage':'archive_fetch','messageId':mid,'message':str(e)[:160]})
     if eligible:
-        batch_modify(eligible, remove=['INBOX'])
+        batch_modify(sorted(eligible), remove=['INBOX'])
         RESULT['archived'] = len(eligible)
 except Exception as e:
     RESULT['status'] = 'partial'; RESULT['errors'].append({'stage':'archive','message':str(e)[:180]})
@@ -405,6 +420,7 @@ except Exception as e:
 # Final unread inbox IDs.
 try:
     RESULT['unreadAfter'] = list_all_messages('is:unread in:inbox')
+    RESULT['leftUnread'] = len(set(unread_ids) & set(RESULT['unreadAfter']))
 except Exception as e:
     RESULT['status'] = 'partial'; RESULT['errors'].append({'stage':'final_unread','message':str(e)[:180]})
 
