@@ -213,6 +213,9 @@
 
 ## Todos / Backlog
 
+- **Starlink billing (2026-10-11):** Dylan added a new payment method; prior failed-payment alert addressed per his report, not independently verified.
+- **Apple Developer ID (2026-10-11):** Dylan acknowledged the notice; non-urgent. Renewal planning before February 1, 2027 remains pending.
+
 - **Harden memory handling for untrusted sessions** — MEMORY.md is injected into all DM sessions including strangers. Plan: (1) split PII out of MEMORY.md into `memory/private.md` (not auto-injected), (2) add SOUL.md rule to go memory-blind with untrusted contacts, (3) longer-term: OpenClaw bootstrap hook to gate injection by session type.
 
 

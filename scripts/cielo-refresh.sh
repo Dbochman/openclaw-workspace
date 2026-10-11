@@ -48,8 +48,8 @@ import time
 
 path = Path(sys.argv[1])
 try:
-    info = path.lstat()
-    if not stat.S_ISREG(info.st_mode) or path.is_symlink() or info.st_uid != __import__('os').getuid():
+info = path.lstat()
+if not stat.S_ISREG(info.st_mode) or path.is_symlink() or info.st_uid != __import__('os').getuid():
         raise ValueError
     if stat.S_IMODE(info.st_mode) & 0o077:
         raise ValueError

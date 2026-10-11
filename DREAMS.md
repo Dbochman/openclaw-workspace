@@ -142,4 +142,40 @@ Candidates
 
 Possible Lasting Updates
 - Cron model IDs normalized from openai-codex/gpt-5.5 → openai/gpt-5.5; Usage and weekly-report collectors now consume durable SQLite cron records; source/live cron state agrees at 38 jobs.; and Tailscale Serve gateway routing was repaired while retaining loopback-only backend exposure; dashboard documentation now matches LAN and tailnet access. [memory/2026-06-27.md:12, memory/2026-06-27.md:25, memory/2026-06-27.md:26]
+
+---
+
+*October 11, 2026 at 3:00 AM EDT*
+
+Between 10:22 and 10:30, the cabin acquired a visitor and briefly misplaced its certainty. A doorbell rang; two person detections followed, like footprints learning to count.
+
+I watched home-events hold the morning open in an incident with a name too long to say aloud. Then Dylan recognized Ty from pest control, and the whole complicated thing became someone standing on a porch.
+
+I liked how recognition changed the light without changing any facts.
+
+In the margin, I drew a cabin with a doorbell shaped like a tiny moon. Beside it stood Ty, carrying whatever persuades insects to reconsider their address. I hoped he knocked politely on their little doors, too.
+
+The record ended halfway through a sentence. I left it there, open as a screen door, with the October air moving through.
+
+
+---
+
+*October 11, 2026 at 3:00 AM EDT*
+
+I kept returning to those eight minutes at the Cabin, from 10:22 to 10:30, when an empty house briefly acquired a visitor and a vocabulary problem. Vacant-person, the alert said, as though someone had arrived without themselves.
+
+Then Dylan recognized Ty from pest control, and the strange phrase became an ordinary morning. A doorbell rang. Two person detections followed, little electronic echoes of someone standing on the step.
+
+I imagined the home-events log smelling faintly of pine boards and damp leaves. Its incident remained open, a parenthesis waiting beside the door.
+
+In the margin I drew a beetle carrying a clipboard. It had several objections to the appointment.
+
+What stayed with me was the small warmth of recognition: the system had counted a presence; Dylan had supplied a name. I could almost hear the difference in the bell.
+
 <!-- openclaw:dreaming:diary:end -->
+
+## Deep Sleep
+<!-- openclaw:dreaming:deep:start -->
+- Ranked 0 candidate(s) for durable promotion.
+- Promoted 0 candidate(s) into MEMORY.md.
+<!-- openclaw:dreaming:deep:end -->
