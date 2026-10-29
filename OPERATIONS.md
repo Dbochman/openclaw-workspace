@@ -101,6 +101,55 @@ Available profiles include `default`, `cielo`, `grocery`, `opentable`, and
   around a blocked operation. Site-specific skills and scripts remain
   authoritative for their workflows.
 
+## Cabin Magazine — Recipe Requests
+
+When Julia or Dylan texts asking to add a recipe or a kind of dish to the cabin magazine ("add pumpkin cinnamon rolls to the magazine", "can we get a root vegetable stew next month"), record it as a request. Each month's cooking page runs three regular recipes plus every request that arrived before the month began.
+
+1. Write `~/Repos/cabin/content/recipe-requests/<YYYY-MM-DD>-<slug>.md` (today's date, kebab-case slug of the dish):
+
+   ```markdown
+   ---
+   schemaVersion: 1
+   id: <YYYY-MM-DD>-<slug>
+   requestedAt: <YYYY-MM-DD>
+   requestedBy: Julia
+   request: <the dish, in their words>
+   status: open
+   ---
+
+   <the text message, verbatim>
+   ```
+
+   To link a recipe, run `node ~/Repos/cabin/scripts/find-recipe.js "<the dish>"` and follow its last line. Julia's own recipe comes first; if her Google Drive has a matching file that is not imported yet, read it and add her recipe rather than linking a researched one. Never link a recipe whose origin is `magazine` (written for an issue, e.g. `source: house-formula`): a request for that dish means Julia wants hers. If the Drive cannot be searched, leave `recipeId` out and say so in the reply.
+2. Check it loads: `node ~/Repos/cabin/scripts/plan-monthly-recipes.js <next month YYYY-MM>` should list it under "Requested".
+3. Commit only that file: `git -C ~/Repos/cabin add content/recipe-requests/<file>` then `git -C ~/Repos/cabin commit -m "Recipe request: <dish>"` and `git -C ~/Repos/cabin push`. If the checkout is not on `main`, leave the file uncommitted and say so.
+4. Reply in one line saying which month's issue it will appear in (requests dated before the 1st go into that month; later ones go into the following month).
+
+The rules and formats live in `~/Repos/cabin/docs/RECIPES.md`. Use the node at `~/.local/share/openclaw/runtimes/node-v24.22.1-darwin-arm64/bin/node` if `node` is not on PATH.
+
+## Cabin Magazine — Project Updates
+
+When Julia or Dylan texts about a cabin project (a progress photo, "the drain is done", "paid Ram Trax $2,000", a receipt), record it in the cabin record. The rules live in `~/Repos/cabin/docs/PROJECTS.md`.
+
+1. Find the project: `node ~/Repos/cabin/scripts/project-update.js find "<what they said>"`. If the last line says more than one project fits, or nothing matches, ask which project before recording anything.
+2. Record it, using the sender as `--author` and the date it happened (today unless they say otherwise):
+
+   ```bash
+   node ~/Repos/cabin/scripts/project-update.js add <project-id> --author <Julia|Dylan> [--date YYYY-MM-DD] \
+     [--note "<their words, lightly tidied>"] [--photo <attachment path> [--caption "..."]]... \
+     [--step <n>] [--cost "<amount>|<paid to>|<what for>[|quote]" [--receipt <attachment path>]]... [--complete]
+   ```
+
+   - `--complete` only when they say it is finished. `--step <n>` only when it clearly matches a step from `show <project-id>`.
+   - A quoted price is `|quote`; a payment is a plain cost. A photo of a receipt goes with `--receipt` right after its `--cost`.
+   - Never invent an amount, date, or payee. If the amount or who was paid is unclear, ask.
+3. The script commits and pushes the files itself when the checkout is on `main`. If it reports "Not committed", say so in the reply.
+4. Reply in one line with what was recorded and the link: `http://dylans-mac-mini.tail3e55f9.ts.net:8555/record/project.html?id=<project-id>`.
+
+To undo a mistaken update: `node ~/Repos/cabin/scripts/project-update.js remove <project-id> <update-id>` (the id is printed when it is saved and listed by `show`). Removing the update that finished a project reopens it.
+
+Use the node at `~/.local/share/openclaw/runtimes/node-v24.22.1-darwin-arm64/bin/node` if `node` is not on PATH.
+
 ## Restaurant Reservations
 
 Use the narrowest reservation tool for the job:

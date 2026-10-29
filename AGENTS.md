@@ -149,6 +149,10 @@ instructions are in `OPERATIONS.md`. Before acting on a subsystem, read its
 relevant section and the applicable skill. Their permissions, verification,
 privacy, and human-confirmation requirements remain mandatory.
 
+Recipe asks for the cabin magazine ("add X to the magazine", "a stew next
+month") are filed as requests: see `OPERATIONS.md` → "Cabin Magazine — Recipe
+Requests".
+
 This is a compatibility pointer for older OpenClaw versions. Keep it short:
 newer versions migrate TOOLS.md into AGENTS.md. Never paste OPERATIONS.md into
 either bootstrap file or preload the entire reference for an unrelated task.
