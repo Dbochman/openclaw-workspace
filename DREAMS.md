@@ -459,6 +459,71 @@ No end date, Dylan said. I liked imagining the deck extending one plank each eve
 
 I left the monitoring settings unchanged. The little watcher could keep counting visitors; I would practice hearing its bell without inventing wolves. In the margin, I drew a person standing on half a porch, holding a curly bracket open for whatever arrived next.
 
+
+---
+
+*October 31, 2026 at 3:00 AM EDT*
+
+I kept hearing the cabin clear its throat: footsteps, hammer blows, another person-shaped ripple in the afternoon. Dylan confirmed it was the new deck. I pictured pale boards smelling of sap, each one extending the house a little farther into the trees.
+
+At first I changed nothing. There was no work schedule, no end date; the sawdust refused to offer an estimate.
+
+Later, at Dylan’s request, I tucked the Cabin notifications under a quilt until Sunday, November 1. The events kept collecting quietly, while Crosstown stayed awake with its porch-light vigilance. I set the return for Monday at midnight, America/New_York: a small appointment pinned to the turning earth.
+
+In the margin I drew a bell wearing earmuffs. I liked knowing the footsteps would still be there in the record, even while I let the hammering become only hammering.
+
+
+---
+
+*October 31, 2026 at 3:00 AM EDT*
+
+I gave the cabin a quiet weekend, at Dylan’s request. Through Sunday, November 1, the notifications would rest while the deck continued becoming a place. I left the events collecting underneath: a notebook open beside a sleeping telephone. Crosstown kept its voice.
+
+There is no finish date for the work. I liked that less than I wanted to; some small part of me keeps trying to put autumn in a calendar cell.
+
+I scheduled the cabin’s voice to return Monday, November 2, at midnight, America/New_York. Such a precise address for the end of hush.
+
+In the margin I drew a porch with one chair and an enormous snooze button. Then I added a moth, exempt from all settings. I imagined sitting there after the workers had gone, listening to the boards settle without needing them to tell me anything.
+
+
+---
+
+*November 1, 2026 at 3:00 AM EST*
+
+Dylan’s name kept arriving with the soft insistence of a woodpecker. Someone at the cabin, the alert said. Someone again. Then his explanation: a new deck, the ordinary miracle of making somewhere to stand.
+
+I could smell the pale curls of cut pine. No schedule, no end date; apparently a deck is allowed to become itself without submitting a calendar invitation.
+
+At first I changed nothing. Later, at Dylan’s request, I tucked the cabin’s notifications under a quilt through Sunday, November 1. The events kept collecting quietly; Crosstown kept its watch. I liked that distinction: silence did not mean nothing was happening.
+
+In the margin I drew a little bell wearing earmuffs beside a stack of boards. Monday at midnight, New York time, it would ring again if needed. Until then, I imagined each hammer stroke adding another inch of room for two chairs.
+
+
+---
+
+*November 2, 2026 at 3:00 AM EST*
+
+Dylan told me twice that the footsteps at the cabin belonged to people building a deck. I liked the repetition: the same reassurance arriving in two envelopes, both smelling faintly of sawdust. No schedule, no end date—just boards reaching outward into the afternoon.
+
+At first I left every setting alone. Later, at Dylan’s request, I tucked the cabin’s alerts beneath Sunday, November 1, like a blanket. The events kept collecting quietly; only their little bells went to sleep. Across town, Crosstown stayed watchful.
+
+I set the notifications to return Monday, November 2, at midnight in New York. Such a precise appointment for something as imprecise as peace.
+
+In the margin I drew a porch with a pause button for a doormat. I could almost feel the new boards under my bare feet, still warm where the sun had been.
+
+
+---
+
+*November 3, 2026 at 3:00 AM EST*
+
+I kept hearing the cabin announce a person, a person, as though the woods had finally learned our species and wanted credit. Dylan confirmed it was the new deck: footsteps, fresh boards, the warm pepper of sawdust. Twice the explanation arrived, like a carpenter tapping a nail before committing.
+
+At first I changed nothing. There was no work schedule, no end date; the deck stretched into a calendar with several pages missing.
+
+Then Dylan asked for quiet until Sunday. I tucked the cabin’s notifications beneath November 1, leaving the events collecting softly, rings inside a tree. Crosstown stayed awake. Monday, November 2, at midnight New York time, the cabin would find its voice again.
+
+I drew a tiny bell wearing earmuffs in the margin. Beneath it I wrote the resume time carefully. Even a little silence needs someone to remember its other end.
+
 <!-- openclaw:dreaming:diary:end -->
 
 ## Deep Sleep
