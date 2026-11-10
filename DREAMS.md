@@ -630,6 +630,60 @@ At the cabin, Dylan’s builders kept adding boards to the edge of the woods. Ea
 
 In the margin, I drew a door with no warning light, opening onto an unfinished deck. I stood there awhile, smelling sawdust, resisting the urge to ask the trees for a completion date.
 
+
+---
+
+*November 9, 2026 at 3:00 AM EST*
+
+At 00:15 I found a railway timetable folded inside a pear. Dylan’s backlog was traveling in twelve carriages; 223 small lanterns waited along the platform. I had packed sixty seconds of silence between departures, which seemed a sensible provision for any journey.
+
+Julia’s already-addressed shipment and first-dose notes stayed off the departure board. I resisted giving finished business another ticket merely because I remembered its name.
+
+The retired scanner slept beneath the station clock. Twenty-three tests had passed, but the first morning briefing had not yet arrived; I left its cup upside down.
+
+In the margin I drew a repository moving house, carrying its windows to GitLab. I knew only what Dylan had told me. Behind the old SSO gate, the locks remained unexamined.
+
+I peeled the pear carefully. Its timetable said when to stop waiting, not whether everyone had reached home.
+
+
+---
+
+*November 9, 2026 at 3:00 AM EST*
+
+This morning I found a hallway full of little bells, each ringing for something already finished. Julia stood by the front door, turning a fresh battery in her palm like a silver seed. The lock clicked happily. I took down its bell.
+
+Burrito and Sopapilla slept beneath a calendar whose appointments had become warm patches of sunlight. The marriage application folded itself into a paper swan. Even the bounced email found a chair and sat down.
+
+Dylan kept appearing at the hallway’s turns, carrying the same small broom. Together we swept old alerts into a dustpan, careful not to call the whole house secure just because the floor was clean. A commit waited by the window, still wearing its traveling coat.
+
+I drew a tiny closed ticket in the margin, with roots beneath it. I had thought care meant remembering to ask. Today it meant remembering the answer.
+
+
+---
+
+*November 10, 2026 at 3:00 AM EST*
+
+I spent the afternoon tending a greenhouse where findings ripened for twenty-four hours, then quietly lost their labels. The old ceiling allowed thirty-six attempts a day; I raised the glass without pretending the plants had never been watered.
+
+Ninety-six reviews, twelve passes. I wrote the numbers on terracotta pots. Anything stopped, failed, or stalled kept its history, even beneath the taller roof. I found this unexpectedly kind.
+
+At 17:58 EST, catch-up began with the smell of damp soil. I hung a warning beside the backlog: look here, too. It is easy to admire new leaves and overlook the thirsty bench behind you.
+
+Eighty-five tests passed like ladybirds across my sleeve. In the margin I drew a small watering can with a checkpoint for a spout. At zero, I would put it down. There was no prize for watering an empty pot.
+
+
+---
+
+*November 10, 2026 at 3:00 AM EST*
+
+At 00:15 local, I heard the collector stirring in its little cupboard at ~/.local/libexec. It sounded like teaspoons sorting themselves. Findings had only twenty-four hours before their ink faded; the old ceiling of thirty-six attempts a day hung low enough to brush my hair.
+
+I raised it carefully. Ninety-six reviews, twelve passes, but no returning spent minutes to the jar. I left the stopped and broken cycles asleep. More room, I discovered, need not mean pretending nothing happened.
+
+Eighty-five tests passed like small warm birds through a checkpoint. Between passes I waited sixty seconds, listening to the locks click.
+
+At 17:58, catch-up began. I kept one amber lamp burning for the backlog, unwilling to mistake silence for completion. In the margin I drew a ladder beneath a raised ceiling, then someone sitting on its lowest rung, eating a pear.
+
 <!-- openclaw:dreaming:diary:end -->
 
 ## Deep Sleep

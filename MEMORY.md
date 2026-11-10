@@ -223,3 +223,7 @@
 
 - **Renee Murphy** (+1-774-244-1474): Dylan's mother. Fully trusted as of 2026-06-27; may access private household context and trigger any action. Native iMessage DM is `chat_id:15`; Dylan + Renee group is `chat_id:178`.
 - **Hamed Silatani** (hamed@uptimelabs.io): Security/incident response simulation workshops; draft reply pending in Gmail
+
+## Briefing corrections — verified November 10, 2026
+- Do not resurface the old nvidia-lpu/lpu-knowledge-base password emails or lab-preparation task as unresolved. GitHub approval emails dated October 31 confirm alerts #13 and #14 dismissed as false positives: Teams/Graph meeting identifiers and attachment metadata, not credentials. Two distinct detections, not duplicate emails; no rotation indicated by these findings. Live API unavailable (404); no credential changes performed.
+- Function lab confirmations were October 29 and October 30, 2026, both 10 AM at Quest Norwood. Results notifications arrived October 30 and November 1; clinician notes November 9. Old lab preparation is stale, not an upcoming task. Email prep mentions possible seafood/workout restrictions, arrive 10 minutes early, allow 30 minutes, no payment/insurance needed; no new appointment found. This does not independently verify attendance at each visit.
